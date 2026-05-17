@@ -4,276 +4,405 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Diário Brawl MMA</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root { --red:#cc1111; --red-bright:#e82222; --dark:#080808; --card:#111111; --border:#2a2a2a; --text:#d8d8d8; --muted:#777; }
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body { background:var(--dark); color:var(--text); font-family:'Barlow',sans-serif; min-height:100vh; background-image:radial-gradient(ellipse at top center,#1a0000 0%,#0a0a0a 55%); }
-  .container { max-width:540px; margin:0 auto; padding:24px 16px 60px; }
-  .header { text-align:center; margin-bottom:28px; }
-  .header h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.6rem,9vw,3.4rem); letter-spacing:2px; line-height:1; background:linear-gradient(135deg,#ff2222,#cc0000,#888888); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-  .header .emoji-fire { font-size:2rem; display:block; margin-bottom:4px; }
-  .pix-box { background:#161616; border:1px solid #2a2a2a; border-radius:8px; padding:10px 16px; margin:12px auto 0; display:inline-block; font-size:0.85rem; color:var(--muted); }
-  .pix-box strong { color:#cc3333; }
-  .vagas-bar { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px 18px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; }
-  .vagas-bar .label { font-size:0.9rem; color:var(--muted); }
-  .vagas-count { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; color:var(--red-bright); }
-  .sync-status { display:flex; align-items:center; gap:6px; font-size:0.75rem; color:#444; margin-bottom:16px; }
-  .sync-dot { width:7px; height:7px; border-radius:50%; background:#333; }
-  .sync-dot.online { background:#2ecc71; box-shadow:0 0 6px #2ecc7166; }
-  .sync-dot.syncing { background:#f39c12; animation:blink 0.8s infinite; }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:22px 20px; margin-bottom:20px; }
-  .card-title { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:1px; color:#cc2222; margin-bottom:16px; }
-  .field { margin-bottom:14px; }
-  .field label { display:block; font-size:0.8rem; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px; }
-  .field input { width:100%; background:#141414; border:1px solid #2a2a2a; border-radius:8px; padding:11px 14px; color:var(--text); font-family:'Barlow',sans-serif; font-size:0.95rem; outline:none; transition:border-color 0.2s; }
-  .field input:focus { border-color:var(--red); }
-  .field input::placeholder { color:#3a3a3a; }
-  .btn-submit { width:100%; background:linear-gradient(135deg,#cc1111,#8a0a0a); color:#fff; border:none; border-radius:8px; padding:14px; font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:1.5px; cursor:pointer; margin-top:4px; box-shadow:0 4px 16px rgba(180,0,0,0.35); }
-  @keyframes pulseRed { 0%,100%{box-shadow:0 0 0 0 rgba(200,0,0,0.2)} 50%{box-shadow:0 0 0 8px rgba(200,0,0,0)} }
-  @keyframes pulseGreen { 0%,100%{box-shadow:0 0 0 0 rgba(46,204,113,0.2)} 50%{box-shadow:0 0 0 8px rgba(46,204,113,0)} }
-  .aviso-importante { display:none; background:linear-gradient(135deg,#140000,#1a0000); border:2px solid #cc1111; border-radius:12px; padding:18px; margin-bottom:20px; animation:pulseRed 2.5s ease-in-out infinite; }
-  .aviso-importante .aviso-icon { font-size:1.5rem; margin-bottom:6px; display:block; }
-  .aviso-importante h3 { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; color:#dd3333; margin-bottom:6px; }
-  .aviso-importante p { font-size:0.92rem; color:#bbb; line-height:1.5; }
-  .aviso-importante p strong { color:#ff4444; }
-  .inscrito-box { display:none; background:#141414; border:1px solid #333; border-radius:12px; padding:18px; margin-bottom:20px; }
-  .inscrito-box .check { font-size:1.6rem; margin-bottom:6px; display:block; }
-  .inscrito-box h3 { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; color:#aaaaaa; letter-spacing:1px; margin-bottom:4px; }
-  .inscrito-box p { font-size:0.9rem; color:#666; }
-  .sala-section { display:block; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px 18px; margin-bottom:20px; text-align:center; }
-  .sala-section h3 { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:1px; margin-bottom:14px; color:#cc2222; }
-  .sala-bloqueada-box { background:#111; border:2px solid #3a1010; border-radius:8px; padding:22px 18px; color:#993333; animation:pulseRed 2.5s ease-in-out infinite; }
-  .sala-bloqueada-box .lock-icon { font-size:2.5rem; display:block; margin-bottom:8px; }
-  .sala-bloqueada-box .titulo { font-size:1.1rem; font-weight:700; letter-spacing:1px; }
-  .sala-bloqueada-box .sub { font-size:0.82rem; color:#663333; margin-top:6px; }
-  .sala-liberada-box { display:none; background:#0d1a0d; border:2px solid #2ecc71; border-radius:8px; padding:22px 18px; animation:pulseGreen 2.5s ease-in-out infinite; }
-  .sala-liberada-box .unlock-icon { font-size:2.5rem; display:block; margin-bottom:8px; }
-  .sala-liberada-box .titulo-lib { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; color:#2ecc71; letter-spacing:1px; margin-bottom:4px; }
-  .sala-liberada-box p { font-size:0.9rem; color:#888; margin-bottom:14px; }
-  .btn-sala { display:inline-block; background:linear-gradient(135deg,#bb1111,#7a0808); color:#fff; text-decoration:none; border-radius:8px; padding:12px 28px; font-family:'Bebas Neue',sans-serif; font-size:1.25rem; letter-spacing:1px; box-shadow:0 4px 14px rgba(180,0,0,0.35); }
-  hr.divider { border:none; border-top:1px solid #1a1a1a; margin:6px 0 16px; }
-  .participante-item { display:flex; gap:12px; align-items:flex-start; padding:12px 0; border-bottom:1px solid #1a1a1a; }
-  .participante-item:last-child { border-bottom:none; }
-  .part-num { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; color:#bb1111; min-width:28px; }
-  .part-info .name { font-weight:700; font-size:0.95rem; }
-  .part-info .brawl { font-size:0.82rem; color:var(--muted); }
-  .part-info .phone { font-size:0.78rem; color:#555; margin-top:2px; }
-  .lista-loading { color:#444; font-size:0.85rem; text-align:center; padding:16px 0; }
-  .admin-login-toggle { text-align:center; margin-bottom:12px; }
-  .admin-login-toggle button { background:none; border:1px solid #1a1a1a; color:#2a2a2a; font-size:0.7rem; padding:4px 10px; border-radius:6px; cursor:pointer; font-family:'Barlow',sans-serif; }
-  .admin-login-box { display:none; background:#0e0e0e; border:1px solid #1e1e1e; border-radius:12px; padding:18px; margin-bottom:20px; }
-  .btn-entrar-admin { width:100%; background:#1a1a1a; border:1px solid #333; color:#888; border-radius:8px; padding:11px; font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:1px; cursor:pointer; margin-top:4px; }
-  .admin-panel { display:none; background:#0e0e0e; border:1px solid #cc1111; border-radius:12px; padding:20px 18px; margin-bottom:20px; }
-  .admin-panel-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
-  .admin-panel-header h3 { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:1px; color:#cc2222; }
-  .btn-sair-admin { background:none; border:1px solid #333; color:#555; font-size:0.75rem; padding:4px 10px; border-radius:6px; cursor:pointer; font-family:'Barlow',sans-serif; }
-  .status-badge { display:inline-block; padding:4px 12px; border-radius:20px; font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:16px; }
-  .status-bloqueada { background:#2a0a0a; color:#cc3333; border:1px solid #4a1010; }
-  .status-liberada { background:#1e1e1e; color:#888; border:1px solid #333; }
-  .admin-panel .field input { background:#141414; border-color:#2a2a2a; }
-  .btn-admin { width:100%; border:none; border-radius:8px; padding:13px; font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:1px; cursor:pointer; margin-top:8px; }
-  .btn-liberar { background:linear-gradient(135deg,#3a3a3a,#222); color:#ccc; }
-  .btn-bloquear { background:linear-gradient(135deg,#7a1a1a,#5a0d0d); color:#ffaaaa; }
-  .btn-reset { background:#111; color:#555; border:1px solid #2a2a2a; margin-top:18px; }
-  .btn-reset:hover { color:#cc3333!important; border-color:#cc3333!important; }
-  .admin-sep { border:none; border-top:1px solid #1e1e1e; margin:16px 0 8px; }
-  .admin-part-list { margin-top:16px; }
-  .admin-part-list h4 { font-family:'Bebas Neue',sans-serif; font-size:1rem; color:#666; letter-spacing:1px; margin-bottom:10px; }
-  .admin-part-item { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #1a1a1a; font-size:0.82rem; }
-  .admin-part-item:last-child { border-bottom:none; }
-  .admin-part-item .api { color:#555; }
-  .admin-part-item .anome { color:#aaa; font-weight:600; }
-  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:#1a1a1a; border:1px solid #333; color:#ccc; padding:12px 20px; border-radius:8px; font-size:0.88rem; z-index:999; transition:transform 0.3s; white-space:nowrap; }
-  .toast.show { transform:translateX(-50%) translateY(0); }
-  .toast.success { border-color:#2ecc71; color:#2ecc71; }
-  .toast.error { border-color:#cc1111; color:#ff4444; }
+  :root { --red:#cc1111; --dark:#080808; --card:#111; --border:#2a2a2a; --text:#d8d8d8; --muted:#777; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{ background:var(--dark); color:var(--text); font-family:'Barlow',sans-serif; min-height:100vh; background-image:radial-gradient(ellipse at top,#1a0000 0%,#0a0a0a 55%); }
+  .container{ max-width:540px; margin:0 auto; padding:24px 16px 60px; }
+
+  /* HEADER */
+  .header{ text-align:center; margin-bottom:28px; }
+  .header h1{ font-family:'Bebas Neue',sans-serif; font-size:clamp(2.6rem,9vw,3.4rem); letter-spacing:2px; line-height:1; background:linear-gradient(135deg,#ff2222,#cc0000,#888); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .fire{ font-size:2rem; display:block; margin-bottom:4px; }
+  .pix-box{ background:#161616; border:1px solid #2a2a2a; border-radius:8px; padding:10px 16px; margin:12px auto 0; display:inline-block; font-size:0.85rem; color:var(--muted); }
+  .pix-box strong{ color:#cc3333; }
+
+  /* VAGAS */
+  .vagas-bar{ background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px 18px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; }
+  .vagas-bar .label{ font-size:0.9rem; color:var(--muted); }
+  .vagas-count{ font-family:'Bebas Neue',sans-serif; font-size:1.8rem; color:#e82222; }
+
+  /* CARD */
+  .card{ background:var(--card); border:1px solid var(--border); border-radius:12px; padding:22px 20px; margin-bottom:20px; }
+  .card-title{ font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:1px; color:#cc2222; margin-bottom:16px; }
+
+  /* CAMPOS */
+  .field{ margin-bottom:14px; }
+  .field label{ display:block; font-size:0.8rem; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px; }
+  .field input{ width:100%; background:#141414; border:1px solid #2a2a2a; border-radius:8px; padding:11px 14px; color:var(--text); font-family:'Barlow',sans-serif; font-size:0.95rem; outline:none; transition:border-color 0.2s; }
+  .field input:focus{ border-color:var(--red); }
+  .field input::placeholder{ color:#3a3a3a; }
+
+  /* BTN INSCREVER */
+  .btn-sub{ width:100%; background:linear-gradient(135deg,#cc1111,#8a0a0a); color:#fff; border:none; border-radius:8px; padding:14px; font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:1.5px; cursor:pointer; margin-top:4px; box-shadow:0 4px 16px rgba(180,0,0,.35); transition:transform .15s; }
+  .btn-sub:hover{ transform:translateY(-2px); }
+  .btn-sub:disabled{ opacity:.6; cursor:not-allowed; transform:none; }
+
+  /* AVISO */
+  .aviso{ display:none; background:linear-gradient(135deg,#140000,#1a0000); border:2px solid #cc1111; border-radius:12px; padding:18px; margin-bottom:20px; animation:pRed 2.5s ease-in-out infinite; }
+  @keyframes pRed{ 0%,100%{box-shadow:0 0 0 0 rgba(200,0,0,.2)} 50%{box-shadow:0 0 0 8px rgba(200,0,0,0)} }
+  .aviso .ico{ font-size:1.5rem; margin-bottom:6px; display:block; }
+  .aviso h3{ font-family:'Bebas Neue',sans-serif; font-size:1.2rem; color:#dd3333; margin-bottom:6px; }
+  .aviso p{ font-size:.92rem; color:#bbb; line-height:1.5; }
+  .aviso p strong{ color:#ff4444; }
+
+  /* INSCRITO */
+  .inscrito{ display:none; background:#141414; border:1px solid #333; border-radius:12px; padding:18px; margin-bottom:20px; }
+  .inscrito .ck{ font-size:1.6rem; margin-bottom:6px; display:block; }
+  .inscrito h3{ font-family:'Bebas Neue',sans-serif; font-size:1.2rem; color:#aaa; margin-bottom:4px; }
+  .inscrito p{ font-size:.9rem; color:#666; }
+
+  /* SALA */
+  .sala-wrap{ display:none; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px 18px; margin-bottom:20px; text-align:center; }
+  .sala-wrap h3{ font-family:'Bebas Neue',sans-serif; font-size:1.3rem; color:#cc2222; margin-bottom:14px; }
+
+  .sala-fechada{ background:#0e0000; border:2px solid #7a1010; border-radius:10px; padding:24px 18px; animation:pRed 2.5s ease-in-out infinite; }
+  .sala-fechada .ico{ font-size:2.8rem; display:block; margin-bottom:10px; }
+  .sala-fechada .tit{ font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:2px; color:#cc2222; }
+  .sala-fechada .sub{ font-size:.82rem; color:#663333; margin-top:8px; }
+
+  .sala-aberta{ display:none; background:#051205; border:2px solid #1a7a2a; border-radius:10px; padding:24px 18px; animation:pGreen 2.5s ease-in-out infinite; }
+  @keyframes pGreen{ 0%,100%{box-shadow:0 0 0 0 rgba(46,204,113,.2)} 50%{box-shadow:0 0 0 10px rgba(46,204,113,0)} }
+  .sala-aberta .ico{ font-size:2.8rem; display:block; margin-bottom:10px; }
+  .sala-aberta .tit{ font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:2px; color:#2ecc71; margin-bottom:6px; }
+  .sala-aberta .sub{ font-size:.88rem; color:#4a9a5a; margin-bottom:16px; }
+  .btn-sala{ display:inline-block; background:linear-gradient(135deg,#1a7a2a,#0d5c1a); color:#fff; text-decoration:none; border-radius:8px; padding:14px 32px; font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:1.5px; box-shadow:0 4px 16px rgba(30,160,60,.35); transition:transform .15s; }
+  .btn-sala:hover{ transform:translateY(-2px); }
+
+  /* LISTA */
+  hr.div{ border:none; border-top:1px solid #1a1a1a; margin:6px 0 16px; }
+  .pi{ display:flex; gap:12px; align-items:flex-start; padding:12px 0; border-bottom:1px solid #1a1a1a; }
+  .pi:last-child{ border-bottom:none; }
+  .pn{ font-family:'Bebas Neue',sans-serif; font-size:1.1rem; color:#bb1111; min-width:28px; }
+  .pd .nm{ font-weight:700; font-size:.95rem; }
+  .pd .bw{ font-size:.82rem; color:var(--muted); }
+  .pd .ph{ font-size:.78rem; color:#555; margin-top:2px; }
+  .vazia{ color:#444; font-size:.85rem; text-align:center; padding:16px 0; }
+
+  /* ADMIN */
+  .adm-tog{ text-align:center; margin-bottom:12px; }
+  .adm-tog button{ background:none; border:1px solid #1a1a1a; color:#2a2a2a; font-size:.7rem; padding:4px 10px; border-radius:6px; cursor:pointer; font-family:'Barlow',sans-serif; }
+  .adm-tog button:hover{ color:#444; border-color:#333; }
+
+  .adm-login{ display:none; background:#0e0e0e; border:1px solid #1e1e1e; border-radius:12px; padding:18px; margin-bottom:20px; }
+  .btn-adm-in{ width:100%; background:#1a1a1a; border:1px solid #333; color:#888; border-radius:8px; padding:11px; font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:1px; cursor:pointer; margin-top:4px; }
+  .btn-adm-in:hover{ background:#222; color:#aaa; }
+
+  .adm-panel{ display:none; background:#0e0e0e; border:1px solid #cc1111; border-radius:12px; padding:20px 18px; margin-bottom:20px; }
+  .adm-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .adm-head h3{ font-family:'Bebas Neue',sans-serif; font-size:1.2rem; color:#cc2222; }
+  .btn-sair{ background:none; border:1px solid #333; color:#555; font-size:.75rem; padding:4px 10px; border-radius:6px; cursor:pointer; font-family:'Barlow',sans-serif; }
+
+  .badge{ display:inline-block; padding:4px 12px; border-radius:20px; font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.8px; margin-bottom:16px; }
+  .badge-off{ background:#2a0a0a; color:#cc3333; border:1px solid #4a1010; }
+  .badge-on{ background:#0a2a0a; color:#2ecc71; border:1px solid #1a5a1a; }
+
+  .adm-panel .field input{ background:#141414; border-color:#2a2a2a; }
+
+  .btn-adm{ width:100%; border:none; border-radius:8px; padding:13px; font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:1px; cursor:pointer; margin-top:8px; transition:transform .15s; }
+  .btn-adm:hover{ transform:translateY(-1px); }
+  .btn-abrir{ background:linear-gradient(135deg,#1a5a1a,#0d3d0d); color:#88ff88; }
+  .btn-fechar{ background:linear-gradient(135deg,#7a1a1a,#5a0d0d); color:#ffaaaa; }
+  .btn-reset{ background:#111; color:#555; border:1px solid #2a2a2a; margin-top:18px; }
+  .btn-reset:hover{ color:#cc3333; border-color:#cc3333; }
+
+  .adm-sep{ border:none; border-top:1px solid #1e1e1e; margin:16px 0 8px; }
+  .adm-plist h4{ font-family:'Bebas Neue',sans-serif; font-size:1rem; color:#666; letter-spacing:1px; margin-bottom:10px; }
+  .adm-pi{ display:flex; flex-direction:column; gap:2px; padding:8px 0; border-bottom:1px solid #1a1a1a; font-size:.82rem; }
+  .adm-pi:last-child{ border-bottom:none; }
+  .adm-pi .an{ color:#aaa; font-weight:700; }
+  .adm-pi .ai{ color:#555; }
+
+  /* TOAST */
+  .toast{ position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:#1a1a1a; border:1px solid #333; color:#ccc; padding:12px 20px; border-radius:8px; font-size:.88rem; z-index:999; transition:transform .3s; white-space:nowrap; pointer-events:none; }
+  .toast.show{ transform:translateX(-50%) translateY(0); }
+  .toast.ok{ border-color:#2ecc71; color:#2ecc71; }
+  .toast.err{ border-color:#cc1111; color:#ff4444; }
 </style>
 </head>
 <body>
 <div class="container">
+
   <div class="header">
-    <span class="emoji-fire">🔥</span>
+    <span class="fire">🔥</span>
     <h1>Diário Brawl MMA</h1>
     <div class="pix-box">PIX: <strong>arthursant792@gmail.com</strong></div>
   </div>
+
   <div class="vagas-bar">
     <span class="label">Vagas restantes</span>
     <span class="vagas-count" id="vagasCount">9</span>
   </div>
-  <div class="sync-status">
-    <div class="sync-dot syncing" id="syncDot"></div>
-    <span id="syncLabel">Conectando...</span>
-  </div>
-  <div class="aviso-importante" id="avisoImportante">
-    <span class="aviso-icon">⚠️</span>
+
+  <!-- só aparece após inscrição -->
+  <div class="aviso" id="elAviso">
+    <span class="ico">⚠️</span>
     <h3>Aviso Importante!</h3>
-    <p><strong>NÃO recarregue esta página!</strong> Se você atualizar ou fechar o navegador, perderá sua inscrição.</p>
+    <p><strong>NÃO recarregue esta página!</strong> Se fechar ou atualizar o navegador, perderá sua inscrição.</p>
   </div>
-  <div class="inscrito-box" id="inscritoBox">
-    <span class="check">✅</span>
+
+  <div class="inscrito" id="elInscrito">
+    <span class="ck">✅</span>
     <h3>Inscrição Confirmada!</h3>
     <p>Aguarde a sala ser liberada abaixo.</p>
   </div>
-  <div class="sala-section">
+
+  <!-- SALA — só aparece após inscrição -->
+  <div class="sala-wrap" id="elSala">
     <h3>🚪 Sala Privada</h3>
-    <div id="salaBloqueadaDiv">
-      <div class="sala-bloqueada-box">
-        <span class="lock-icon">🔒</span>
-        <p class="titulo">SALA FECHADA</p>
-        <p class="sub">Aguarde o admin liberar...</p>
-      </div>
+    <div class="sala-fechada" id="elFechada">
+      <span class="ico">🔒</span>
+      <p class="tit">SALA FECHADA</p>
+      <p class="sub">Aguarde o admin liberar...</p>
     </div>
-    <div id="salaLiberadaDiv" style="display:none;">
-      <div class="sala-liberada-box">
-        <span class="unlock-icon">🟢</span>
-        <p class="titulo-lib">✅ SALA LIBERADA!</p>
-        <p>Clique para entrar:</p>
-        <a href="#" class="btn-sala" id="btnEntrarSala" target="_blank">🏆 Entrar na Sala</a>
-      </div>
+    <div class="sala-aberta" id="elAberta">
+      <span class="ico">🟢</span>
+      <p class="tit">SALA ABERTA!</p>
+      <p class="sub">Clique para entrar:</p>
+      <a href="#" class="btn-sala" id="elLink" target="_blank">🏆 Entrar na Sala</a>
     </div>
   </div>
-  <div class="card" id="formCard">
+
+  <!-- FORMULÁRIO -->
+  <div class="card" id="elForm">
     <div class="card-title">Preencha para garantir sua vaga</div>
-    <div class="field"><label>Seu Nome Real</label><input type="text" id="inputNome" placeholder="Ex: João Silva"></div>
-    <div class="field"><label>🎮 Nick no Brawl Stars</label><input type="text" id="inputBrawl" placeholder="Ex: ProPlayer#1234"></div>
-    <div class="field"><label>📱 Número de Telefone</label><input type="tel" id="inputTelefone" placeholder="Ex: (11) 99999-9999"></div>
-    <button class="btn-submit" id="btnInscrever">Entrar no Diário</button>
+    <div class="field"><label>Seu Nome Real</label><input type="text" id="iNome" placeholder="Ex: João Silva"></div>
+    <div class="field"><label>🎮 Nick no Brawl Stars</label><input type="text" id="iBrawl" placeholder="Ex: ProPlayer#1234"></div>
+    <div class="field"><label>📱 Número de Telefone</label><input type="tel" id="iTel" placeholder="Ex: (11) 99999-9999"></div>
+    <button class="btn-sub" id="btnInsc">Entrar no Diário</button>
   </div>
+
+  <!-- LISTA -->
   <div class="card">
     <div class="card-title">Participantes (<span id="partCount">0</span>/9)</div>
-    <hr class="divider">
-    <div id="listaParticipantes"><div class="lista-loading">Carregando...</div></div>
+    <hr class="div">
+    <div id="elLista"><div class="vazia">Nenhum participante ainda.</div></div>
   </div>
-  <div class="admin-login-toggle"><button id="btnToggleLogin">⚙️</button></div>
-  <div class="admin-login-box" id="adminLoginBox">
-    <div class="field"><label>Senha do Admin</label><input type="password" id="inputSenha" placeholder="••••••"></div>
-    <button class="btn-entrar-admin" id="btnEntrarAdmin">Entrar</button>
+
+  <!-- ADMIN -->
+  <div class="adm-tog"><button id="btnTogAdm">⚙️</button></div>
+
+  <div class="adm-login" id="elAdmLogin">
+    <div class="field"><label>Senha Admin</label><input type="password" id="iSenha" placeholder="••••••"></div>
+    <button class="btn-adm-in" id="btnEntAdm">Entrar</button>
   </div>
-  <div class="admin-panel" id="adminPanel">
-    <div class="admin-panel-header">
+
+  <div class="adm-panel" id="elAdmPanel">
+    <div class="adm-head">
       <h3>⚙️ Painel Admin</h3>
-      <button class="btn-sair-admin" id="btnSairAdmin">Sair</button>
+      <button class="btn-sair" id="btnSairAdm">Sair</button>
     </div>
-    <span class="status-badge status-bloqueada" id="statusBadge">🔒 Sala Fechada</span>
-    <div class="field"><label>Link da Sala</label><input type="url" id="adminLinkSala" placeholder="https://link-da-sala.com"></div>
-    <button class="btn-admin btn-liberar" id="btnLiberar">🔓 Liberar Sala</button>
-    <button class="btn-admin btn-bloquear" id="btnBloquear">🔒 Fechar Sala</button>
-    <hr class="admin-sep">
-    <div class="admin-part-list"><h4>📋 Inscritos</h4><div id="adminListaParticipantes"></div></div>
-    <hr class="admin-sep">
-    <button class="btn-admin btn-reset" id="btnReset">🗑️ Resetar Todos</button>
+
+    <span class="badge badge-off" id="elBadge">🔒 Sala Fechada</span>
+
+    <div class="field"><label>Link da Sala Privada</label><input type="url" id="iLink" placeholder="https://link-da-sala.com"></div>
+
+    <button class="btn-adm btn-abrir" id="btnAbrir">🟢 Abrir Sala para Participantes</button>
+    <button class="btn-adm btn-fechar" id="btnFechar">🔒 Fechar Sala</button>
+
+    <hr class="adm-sep">
+    <div class="adm-plist">
+      <h4>📋 Inscritos</h4>
+      <div id="elAdmLista"><div class="vazia" style="font-size:.82rem">Nenhum inscrito.</div></div>
+    </div>
+
+    <hr class="adm-sep">
+    <button class="btn-adm btn-reset" id="btnReset">🗑️ Resetar Todos os Inscritos</button>
   </div>
+
 </div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="elToast"></div>
+
 <script>
 (function(){
-  var TOTAL=9,SENHA="818181",participantes=[],salaLiberada=false,linkSala='',inscrito=false,admin=false;
-  var KP='dbrawl_p',KS='dbrawl_s',KL='dbrawl_l';
-  function salvar(){
-    localStorage.setItem(KP,JSON.stringify(participantes));
-    localStorage.setItem(KS,salaLiberada?'1':'0');
-    localStorage.setItem(KL,linkSala);
-    try{var b=new BroadcastChannel('db');b.postMessage({participantes:participantes,salaLiberada:salaLiberada,linkSala:linkSala});b.close();}catch(e){}
+  var VAGAS = 9;
+  var SENHA = "818181";
+
+  // estado
+  var partic = [];
+  var aberta = false;
+  var link = '';
+  var inscrito = false;
+  var adminOn = false;
+
+  // chaves localStorage
+  var KP = 'db_p', KA = 'db_a', KL = 'db_l', KI = 'db_i';
+
+  /* ---- STORAGE ---- */
+  function gravar(){
+    try{
+      localStorage.setItem(KP, JSON.stringify(partic));
+      localStorage.setItem(KA, aberta ? '1' : '0');
+      localStorage.setItem(KL, link);
+    }catch(e){}
   }
-  function carregar(){
-    try{participantes=JSON.parse(localStorage.getItem(KP))||[];}catch(e){participantes=[];}
-    salaLiberada=localStorage.getItem(KS)==='1';
-    linkSala=localStorage.getItem(KL)||'';
+
+  function ler(){
+    try{ partic = JSON.parse(localStorage.getItem(KP)) || []; }catch(e){ partic=[]; }
+    aberta = localStorage.getItem(KA) === '1';
+    link   = localStorage.getItem(KL) || '';
+    inscrito = localStorage.getItem(KI) === '1';
   }
-  try{var bc=new BroadcastChannel('db');bc.onmessage=function(e){participantes=e.data.participantes||[];salaLiberada=!!e.data.salaLiberada;linkSala=e.data.linkSala||'';renderTudo();};}catch(e){}
+
+  /* ---- TOAST ---- */
   var tt;
-  function toast(m,t){var el=document.getElementById('toast');el.textContent=m;el.className='toast show'+(t?' '+t:'');clearTimeout(tt);tt=setTimeout(function(){el.className='toast';},3000);}
-  function sync(s,l){document.getElementById('syncDot').className='sync-dot '+s;document.getElementById('syncLabel').textContent=l;}
-  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-  function renderLista(){
-    var h='';
-    for(var i=0;i<participantes.length;i++){var p=participantes[i];h+='<div class="participante-item"><div class="part-num">#'+(i+1)+'</div><div class="part-info"><div class="name">'+esc(p.nome)+'</div><div class="brawl">🎮 '+esc(p.brawl)+'</div>'+(p.tel?'<div class="phone">📱 '+esc(p.tel)+'</div>':'')+'</div></div>';}
-    document.getElementById('listaParticipantes').innerHTML=h||'<div class="lista-loading">Nenhum participante ainda.</div>';
-    var r=TOTAL-participantes.length;
-    document.getElementById('vagasCount').textContent=r<0?0:r;
-    document.getElementById('partCount').textContent=participantes.length;
+  function toast(msg, tipo){
+    var el = document.getElementById('elToast');
+    el.textContent = msg;
+    el.className = 'toast show' + (tipo ? ' '+tipo : '');
+    clearTimeout(tt);
+    tt = setTimeout(function(){ el.className='toast'; }, 3000);
   }
+
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  /* ---- RENDER ---- */
+  function renderLista(){
+    var h = '';
+    for(var i=0;i<partic.length;i++){
+      var p=partic[i];
+      h += '<div class="pi"><div class="pn">#'+(i+1)+'</div><div class="pd"><div class="nm">'+esc(p.nome)+'</div><div class="bw">🎮 '+esc(p.brawl)+'</div>'+(p.tel?'<div class="ph">📱 '+esc(p.tel)+'</div>':'')+'</div></div>';
+    }
+    document.getElementById('elLista').innerHTML = h || '<div class="vazia">Nenhum participante ainda.</div>';
+    var r = VAGAS - partic.length;
+    document.getElementById('vagasCount').textContent = r<0?0:r;
+    document.getElementById('partCount').textContent = partic.length;
+  }
+
   function renderSala(){
-    if(salaLiberada&&linkSala){
-      document.getElementById('salaBloqueadaDiv').style.display='none';
-      document.getElementById('salaLiberadaDiv').style.display='block';
-      document.getElementById('btnEntrarSala').href=linkSala;
-    }else{
-      document.getElementById('salaBloqueadaDiv').style.display='block';
-      document.getElementById('salaLiberadaDiv').style.display='none';
+    var wrap = document.getElementById('elSala');
+    if(!inscrito){ wrap.style.display='none'; return; }
+    wrap.style.display='block';
+    if(aberta && link){
+      document.getElementById('elFechada').style.display='none';
+      document.getElementById('elAberta').style.display='block';
+      document.getElementById('elLink').href = link;
+    } else {
+      document.getElementById('elFechada').style.display='block';
+      document.getElementById('elAberta').style.display='none';
     }
   }
-  function renderAdminLista(){
-    var el=document.getElementById('adminListaParticipantes');
-    if(!el)return;
-    if(!participantes.length){el.innerHTML='<div style="color:#444;font-size:0.82rem;padding:8px 0;">Nenhum inscrito.</div>';return;}
+
+  function renderInscrito(){
+    document.getElementById('elAviso').style.display   = inscrito ? 'block' : 'none';
+    document.getElementById('elInscrito').style.display= inscrito ? 'block' : 'none';
+    document.getElementById('elForm').style.display    = inscrito ? 'none'  : 'block';
+  }
+
+  function renderAdmin(){
+    if(!adminOn) return;
+    // badge
+    var b = document.getElementById('elBadge');
+    b.textContent = aberta ? '🟢 Sala Aberta' : '🔒 Sala Fechada';
+    b.className   = 'badge ' + (aberta ? 'badge-on' : 'badge-off');
+    // link
+    document.getElementById('iLink').value = link;
+    // lista inscritos
     var h='';
-    for(var i=0;i<participantes.length;i++){var p=participantes[i];h+='<div class="admin-part-item"><span class="anome">'+esc(p.nome)+'</span><span class="api">🎮 '+esc(p.brawl)+' 📱 '+(p.tel||'—')+'</span></div>';}
-    el.innerHTML=h;
+    for(var i=0;i<partic.length;i++){
+      var p=partic[i];
+      h+='<div class="adm-pi"><span class="an">#'+(i+1)+' '+esc(p.nome)+'</span><span class="ai">🎮 '+esc(p.brawl)+' &nbsp;📱 '+(p.tel||'—')+'</span></div>';
+    }
+    document.getElementById('elAdmLista').innerHTML = h || '<div class="vazia" style="font-size:.82rem">Nenhum inscrito.</div>';
   }
-  function renderBadge(){
-    var b=document.getElementById('statusBadge');
-    if(!b)return;
-    b.textContent=salaLiberada?'🔓 Sala Liberada':'🔒 Sala Fechada';
-    b.className='status-badge '+(salaLiberada?'status-liberada':'status-bloqueada');
-    document.getElementById('adminLinkSala').value=linkSala;
+
+  function renderTudo(){
+    renderLista();
+    renderSala();
+    renderInscrito();
+    renderAdmin();
   }
-  function renderTudo(){renderLista();renderSala();if(admin){renderAdminLista();renderBadge();}}
-  setInterval(function(){carregar();renderTudo();sync('online','Atualizado');},4000);
-  document.getElementById('btnInscrever').addEventListener('click',function(){
-    var n=document.getElementById('inputNome').value.trim();
-    var b=document.getElementById('inputBrawl').value.trim();
-    var t=document.getElementById('inputTelefone').value.trim();
-    if(!n){toast('Insira seu nome!','error');return;}
-    if(!b){toast('Insira seu nick!','error');return;}
-    if(!t){toast('Insira seu telefone!','error');return;}
-    if(TOTAL-participantes.length<=0){toast('Sem vagas!','error');return;}
-    var btn=document.getElementById('btnInscrever');
-    btn.disabled=true;btn.textContent='Inscrevendo...';
-    participantes.push({nome:n,brawl:b,tel:t});
-    salvar();renderLista();
-    document.getElementById('formCard').style.display='none';
-    document.getElementById('avisoImportante').style.display='block';
-    document.getElementById('inscritoBox').style.display='block';
-    inscrito=true;renderSala();
-    toast('Inscrição confirmada! ✅','success');
+
+  // Atualiza a cada 3s para pegar mudanças do admin
+  setInterval(function(){ ler(); renderTudo(); }, 3000);
+
+  /* ---- INSCREVER ---- */
+  document.getElementById('btnInsc').addEventListener('click', function(){
+    var nome = document.getElementById('iNome').value.trim();
+    var brawl= document.getElementById('iBrawl').value.trim();
+    var tel  = document.getElementById('iTel').value.trim();
+    if(!nome) { toast('Insira seu nome!','err'); return; }
+    if(!brawl){ toast('Insira seu nick no Brawl Stars!','err'); return; }
+    if(!tel)  { toast('Insira seu telefone!','err'); return; }
+    if(VAGAS - partic.length <= 0){ toast('Sem vagas!','err'); return; }
+    var btn = this; btn.disabled=true; btn.textContent='Inscrevendo...';
+    partic.push({nome:nome, brawl:brawl, tel:tel});
+    inscrito = true;
+    gravar();
+    try{ localStorage.setItem(KI,'1'); }catch(e){}
+    renderTudo();
+    toast('Inscrição confirmada! ✅','ok');
   });
-  document.getElementById('btnToggleLogin').addEventListener('click',function(){
-    var box=document.getElementById('adminLoginBox');
-    box.style.display=box.style.display==='block'?'none':'block';
+
+  /* ---- ADMIN LOGIN ---- */
+  document.getElementById('btnTogAdm').addEventListener('click', function(){
+    var el=document.getElementById('elAdmLogin');
+    el.style.display = el.style.display==='block' ? 'none' : 'block';
   });
-  document.getElementById('btnEntrarAdmin').addEventListener('click',function(){
-    var s=document.getElementById('inputSenha').value;
-    if(s===SENHA){admin=true;document.getElementById('adminLoginBox').style.display='none';document.getElementById('adminPanel').style.display='block';document.getElementById('inputSenha').value='';renderBadge();renderAdminLista();}
-    else{toast('Senha incorreta!','error');document.getElementById('inputSenha').value='';}
+
+  function entrarAdm(){
+    if(document.getElementById('iSenha').value === SENHA){
+      document.getElementById('iSenha').value='';
+      document.getElementById('elAdmLogin').style.display='none';
+      document.getElementById('elAdmPanel').style.display='block';
+      adminOn=true;
+      ler(); renderAdmin();
+    } else {
+      toast('Senha incorreta!','err');
+      document.getElementById('iSenha').value='';
+    }
+  }
+  document.getElementById('btnEntAdm').addEventListener('click', entrarAdm);
+  document.getElementById('iSenha').addEventListener('keydown', function(e){ if(e.key==='Enter') entrarAdm(); });
+
+  document.getElementById('btnSairAdm').addEventListener('click', function(){
+    document.getElementById('elAdmPanel').style.display='none';
+    adminOn=false;
   });
-  document.getElementById('inputSenha').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('btnEntrarAdmin').click();});
-  document.getElementById('btnSairAdmin').addEventListener('click',function(){admin=false;document.getElementById('adminPanel').style.display='none';});
-  document.getElementById('btnLiberar').addEventListener('click',function(){
-    var l=document.getElementById('adminLinkSala').value.trim();
-    if(!l){toast('Cole o link antes de liberar!','error');return;}
-    linkSala=l;salaLiberada=true;salvar();renderSala();renderBadge();
-    toast('✅ Sala liberada!','success');
+
+  /* ---- ABRIR SALA ---- */
+  document.getElementById('btnAbrir').addEventListener('click', function(){
+    var l = document.getElementById('iLink').value.trim();
+    if(!l){ toast('Cole o link antes de abrir!','err'); return; }
+    link=l; aberta=true;
+    gravar(); renderAdmin(); renderSala();
+    toast('Sala aberta! 🟢','ok');
   });
-  document.getElementById('btnBloquear').addEventListener('click',function(){
-    salaLiberada=false;salvar();renderSala();renderBadge();
-    toast('🔒 Sala fechada!');
+
+  /* ---- FECHAR SALA ---- */
+  document.getElementById('btnFechar').addEventListener('click', function(){
+    aberta=false;
+    gravar(); renderAdmin(); renderSala();
+    toast('Sala fechada! 🔒','err');
   });
-  document.getElementById('btnReset').addEventListener('click',function(){
-    if(!confirm('Apagar todos os inscritos?'))return;
-    participantes=[];salaLiberada=false;linkSala='';salvar();renderTudo();inscrito=false;
-    document.getElementById('avisoImportante').style.display='none';
-    document.getElementById('inscritoBox').style.display='none';
-    document.getElementById('formCard').style.display='block';
-    document.getElementById('inputNome').value='';
-    document.getElementById('inputBrawl').value='';
-    document.getElementById('inputTelefone').value='';
-    toast('🗑️ Todos removidos!');
+
+  /* ---- RESET ---- */
+  document.getElementById('btnReset').addEventListener('click', function(){
+    if(!confirm('Apagar todos os inscritos?')) return;
+    partic=[]; aberta=false; link=''; inscrito=false;
+    gravar();
+    try{
+      localStorage.removeItem(KI);
+      localStorage.setItem(KP, JSON.stringify([]));
+      localStorage.setItem(KA, '0');
+      localStorage.setItem(KL, '');
+    }catch(e){}
+    // resetar formulário
+    document.getElementById('iNome').value='';
+    document.getElementById('iBrawl').value='';
+    document.getElementById('iTel').value='';
+    document.getElementById('btnInsc').disabled=false;
+    document.getElementById('btnInsc').textContent='Entrar no Diário';
+    document.getElementById('iLink').value='';
+    renderTudo();
+    toast('Resetado com sucesso!','ok');
   });
-  carregar();renderTudo();sync('online','Atualizado');
+
+  /* ---- INIT ---- */
+  ler();
+  renderTudo();
+
 })();
 </script>
 </body>
