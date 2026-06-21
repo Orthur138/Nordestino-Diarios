@@ -18,34 +18,34 @@
     background: var(--dark); color: var(--text); font-family: 'Barlow', sans-serif;
     min-height: 100vh; background-image: radial-gradient(ellipse at top center, #1a0000 0%, #0a0a0a 55%);
   }
-  .container { max-width: 480px; margin: 0 auto; padding: 24px 16px 60px; }
+  .container { max-width: 540px; margin: 0 auto; padding: 28px 18px 60px; }
 
-  .header { text-align: center; margin-bottom: 20px; }
+  .header { text-align: center; margin-bottom: 24px; }
   .header h1 {
-    font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.2rem, 8vw, 2.8rem);
+    font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.6rem, 9vw, 3.4rem);
     letter-spacing: 2px; line-height: 1;
     background: linear-gradient(135deg, #ff2222, #cc0000, #999999);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
-  .header .sub { font-size: 0.78rem; color: var(--muted); letter-spacing: 1px; margin-top: 4px; text-transform: uppercase; }
+  .header .sub { font-size: 0.78rem; color: var(--muted); letter-spacing: 1px; margin-top: 6px; text-transform: uppercase; }
 
-  .sync-status { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.72rem; color: #444; margin-bottom: 18px; }
+  .sync-status { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.72rem; color: #444; margin-bottom: 20px; }
   .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: #333; }
   .sync-dot.online { background: #2ecc71; box-shadow: 0 0 6px #2ecc7166; }
   .sync-dot.syncing { background: #f39c12; animation: blink 0.8s infinite; }
   .sync-dot.error { background: #cc1111; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-  /* Stats grid (estilo da imagem) */
-  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
-  .stat-box { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 8px; text-align: center; }
-  .stat-box .stat-icon { font-size: 0.95rem; margin-bottom: 4px; display: block; opacity: 0.7; }
+  /* Stats grid */
+  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+  .stat-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 8px; text-align: center; }
+  .stat-box .stat-icon { font-size: 1rem; margin-bottom: 4px; display: block; opacity: 0.75; }
   .stat-box .stat-label { font-size: 0.62rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px; }
-  .stat-box .stat-val { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--text); }
+  .stat-box .stat-val { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--text); }
 
   .progress-bar-wrap { background: #1c1c1c; border-radius: 20px; height: 8px; overflow: hidden; margin-bottom: 6px; }
   .progress-bar-fill { background: linear-gradient(90deg, var(--red), var(--red-bright)); height: 100%; transition: width 0.4s ease; }
-  .progress-label { text-align: center; font-size: 0.72rem; color: var(--muted); margin-bottom: 14px; }
+  .progress-label { text-align: center; font-size: 0.72rem; color: var(--muted); margin-bottom: 16px; }
 
   .ultima-vaga-banner {
     display: none; background: linear-gradient(135deg, #2a0a0a, #1a0505); border: 1px solid #cc1111;
@@ -59,16 +59,16 @@
     font-weight: 700; margin-bottom: 16px;
   }
 
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px 18px; margin-bottom: 16px; }
-  .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.25rem; letter-spacing: 1px; color: #e23030; margin-bottom: 4px; display:flex; align-items:center; gap:8px; }
-  .card-sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 16px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px 20px; margin-bottom: 18px; }
+  .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 1px; color: #e23030; margin-bottom: 4px; display:flex; align-items:center; gap:8px; }
+  .card-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 18px; line-height: 1.5; }
 
-  .field { margin-bottom: 14px; }
-  .field label { display: block; font-size: 0.72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 0.74rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 7px; }
   .field input {
     width: 100%; background: #181818; border: 1px solid #2a2a2a; border-radius: 9px;
-    padding: 12px 14px; color: var(--text); font-family: 'Barlow', sans-serif;
-    font-size: 0.95rem; transition: border-color 0.2s; outline: none;
+    padding: 13px 16px; color: var(--text); font-family: 'Barlow', sans-serif;
+    font-size: 0.97rem; transition: border-color 0.2s; outline: none;
   }
   .field input:focus { border-color: var(--red); }
   .field input::placeholder { color: #444; }
@@ -76,28 +76,28 @@
 
   .btn-main {
     width: 100%; background: linear-gradient(135deg, #cc1111, #7a0a0a); color: #fff;
-    border: none; border-radius: 10px; padding: 14px;
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; letter-spacing: 1.2px;
+    border: none; border-radius: 10px; padding: 15px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 1.5px;
     cursor: pointer; transition: transform 0.15s, opacity 0.2s;
-    box-shadow: 0 4px 16px rgba(180,0,0,0.35);
+    box-shadow: 0 4px 18px rgba(180,0,0,0.38);
     display:flex; align-items:center; justify-content:center; gap:8px;
   }
-  .btn-main:hover:not(:disabled) { transform: translateY(-1px); }
+  .btn-main:hover:not(:disabled) { transform: translateY(-2px); }
   .btn-main:disabled { opacity: 0.5; cursor: not-allowed; }
 
   /* Logado-como bar */
   .logado-bar {
     display: none; align-items: center; justify-content: space-between; gap: 10px;
     background: var(--card2); border: 1px solid var(--border); border-radius: 12px;
-    padding: 12px 14px; margin-bottom: 16px;
+    padding: 13px 16px; margin-bottom: 18px;
   }
   .logado-info { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
-  .logado-info .av { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #cc1111, #5a0505); display:flex; align-items:center; justify-content:center; font-size:0.9rem; flex-shrink:0; }
+  .logado-info .av { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, #cc1111, #5a0505); display:flex; align-items:center; justify-content:center; font-size:0.95rem; flex-shrink:0; }
   .logado-info .txt .lbl { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-  .logado-info .txt .nm { font-weight: 700; color: var(--text); }
+  .logado-info .txt .nm { font-weight: 700; color: var(--text); font-size: 0.92rem; }
   .btn-sair-mini {
     background: none; border: 1px solid #3a1010; color: #cc5555; font-size: 0.72rem;
-    padding: 6px 12px; border-radius: 8px; cursor: pointer; font-family: 'Barlow', sans-serif; font-weight:600;
+    padding: 7px 14px; border-radius: 8px; cursor: pointer; font-family: 'Barlow', sans-serif; font-weight:600;
     white-space: nowrap;
   }
   .btn-sair-mini:hover { background: #2a0a0a; }
@@ -107,20 +107,20 @@
   @keyframes pulseGreen { 0%,100% { box-shadow: 0 0 0 0 rgba(46,204,113,0.2); } 50% { box-shadow: 0 0 0 8px rgba(46,204,113,0); } }
   @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
 
-  /* ===== TELA PÓS-INSCRIÇÃO (compacta) ===== */
-  .pos-card { display: none; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 16px; }
-  .pos-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-  .pos-card-top .status { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 700; color: #2ecc71; }
+  /* ===== TELA POS-INSCRICAO ===== */
+  .pos-card { display: none; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 18px; }
+  .pos-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .pos-card-top .status { display: flex; align-items: center; gap: 8px; font-size: 0.92rem; font-weight: 700; color: #2ecc71; }
   .pos-card-top .status .dot { width: 8px; height: 8px; border-radius: 50%; background: #2ecc71; box-shadow: 0 0 8px #2ecc7188; }
   .btn-cancelar-mini {
-    background: none; border: 1px solid #3a1010; color: #cc5555; font-size: 0.7rem;
-    padding: 5px 10px; border-radius: 7px; cursor: pointer; font-family: 'Barlow', sans-serif; font-weight: 600;
+    background: none; border: 1px solid #3a1010; color: #cc5555; font-size: 0.72rem;
+    padding: 6px 12px; border-radius: 7px; cursor: pointer; font-family: 'Barlow', sans-serif; font-weight: 600;
   }
   .btn-cancelar-mini:hover { background: #2a0a0a; }
 
   .pos-beneficio-tag {
-    display: none; border-radius: 10px; padding: 10px 14px; margin-bottom: 12px;
-    font-size: 0.82rem; font-weight: 700; text-align: center; align-items: center; justify-content: center; gap: 8px;
+    display: none; border-radius: 10px; padding: 12px 16px; margin-bottom: 14px;
+    font-size: 0.85rem; font-weight: 700; text-align: center; align-items: center; justify-content: center; gap: 8px;
   }
   .pos-beneficio-tag.show { display: flex; }
   .pos-beneficio-tag.gold { background: linear-gradient(135deg, var(--gold-bg), #1f1a00); border: 1.5px solid var(--gold-border); color: var(--gold); animation: pulseGold 2.5s ease-in-out infinite; }
@@ -128,97 +128,95 @@
 
   .pix-mini-box {
     display: none; background: #111; border: 1px solid #3a2e00; border-radius: 10px;
-    padding: 12px 14px; margin-bottom: 12px;
+    padding: 14px 16px; margin-bottom: 14px;
   }
-  .pix-mini-box .pix-mini-title { font-size: 0.72rem; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; display:flex; align-items:center; gap:6px; }
-  .pix-mini-entry { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-top: 1px solid #1e1e1e; font-size: 0.78rem; }
+  .pix-mini-box .pix-mini-title { font-size: 0.74rem; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .pix-mini-entry { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-top: 1px solid #1e1e1e; font-size: 0.8rem; }
   .pix-mini-entry:first-of-type { border-top: none; }
   .pix-mini-entry .pix-mini-nome { font-weight: 700; color: #ccc; }
-  .pix-mini-entry .pix-mini-key { color: #999; font-size: 0.74rem; word-break: break-all; text-align: right; max-width: 60%; }
-  .pix-mini-alerta { font-size: 0.7rem; color: #cc6666; margin-top: 8px; line-height: 1.4; }
+  .pix-mini-entry .pix-mini-key { color: #999; font-size: 0.76rem; word-break: break-all; text-align: right; max-width: 60%; }
+  .pix-mini-alerta { font-size: 0.72rem; color: #cc6666; margin-top: 10px; line-height: 1.4; }
 
-  .sala-mini-box { display: none; border-radius: 10px; padding: 14px; text-align: center; margin-bottom: 6px; }
+  .sala-mini-box { display: none; border-radius: 10px; padding: 16px; text-align: center; margin-bottom: 6px; }
   .sala-mini-box.fechada { background: #111; border: 1.5px solid #3a1010; }
   .sala-mini-box.aberta { background: #0d1a0d; border: 1.5px solid #2ecc71; animation: pulseGreen 2.5s ease-in-out infinite; }
-  .sala-mini-box .sm-icon { font-size: 1.6rem; display: block; margin-bottom: 4px; }
-  .sala-mini-box .sm-titulo { font-size: 0.88rem; font-weight: 700; letter-spacing: 0.5px; }
+  .sala-mini-box .sm-icon { font-size: 1.7rem; display: block; margin-bottom: 6px; }
+  .sala-mini-box .sm-titulo { font-size: 0.9rem; font-weight: 700; letter-spacing: 0.5px; }
   .sala-mini-box.fechada .sm-titulo { color: #993333; }
   .sala-mini-box.aberta .sm-titulo { color: #2ecc71; }
-  .sala-mini-box .sm-sub { font-size: 0.74rem; color: #666; margin-top: 2px; }
+  .sala-mini-box .sm-sub { font-size: 0.76rem; color: #666; margin-top: 3px; }
   .btn-sala-mini {
     display: inline-block; background: linear-gradient(135deg, #1a8a3a, #0d5c22); color: #fff;
-    text-decoration: none; border-radius: 8px; padding: 10px 24px; margin-top: 10px;
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 1px;
+    text-decoration: none; border-radius: 8px; padding: 11px 28px; margin-top: 12px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 1px;
   }
 
   .aviso-bloqueado {
     display: none; background: linear-gradient(135deg, #1a0a00, #200d00); border: 1.5px solid #cc6600;
-    border-radius: 12px; padding: 16px; margin-bottom: 16px; text-align: center;
+    border-radius: 12px; padding: 18px; margin-bottom: 18px; text-align: center;
   }
-  .aviso-bloqueado .icon { font-size: 1.3rem; margin-bottom: 6px; display: block; }
-  .aviso-bloqueado strong { color: #cc6600; font-size: 0.95rem; display:block; margin-bottom:4px; }
-  .aviso-bloqueado p { font-size: 0.82rem; color: #aa8844; }
+  .aviso-bloqueado .icon { font-size: 1.4rem; margin-bottom: 6px; display: block; }
+  .aviso-bloqueado strong { color: #cc6600; font-size: 0.97rem; display:block; margin-bottom:4px; }
+  .aviso-bloqueado p { font-size: 0.84rem; color: #aa8844; }
 
-  hr.divider { border: none; border-top: 1px solid #1f1f1f; margin: 4px 0 14px; }
+  hr.divider { border: none; border-top: 1px solid #1f1f1f; margin: 4px 0 16px; }
 
   .participante-item {
-    display: flex; gap: 10px; align-items: center; padding: 10px 11px; border-radius: 9px;
-    border: 1px solid #1e1e1e; margin-bottom: 5px; animation: fadeIn 0.3s ease; background: #161616;
+    display: flex; gap: 10px; align-items: center; padding: 11px 12px; border-radius: 9px;
+    border: 1px solid #1e1e1e; margin-bottom: 6px; animation: fadeIn 0.3s ease; background: #161616;
   }
-  .part-num { font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem; color: #bb1111; min-width: 24px; }
+  .part-num { font-family: 'Bebas Neue', sans-serif; font-size: 0.97rem; color: #bb1111; min-width: 26px; }
   .part-info { flex: 1; min-width: 0; }
-  .part-info .name { font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; flex-wrap: wrap; gap: 5px; }
-  .part-info .brawl { font-size: 0.76rem; color: var(--muted); margin-top: 1px; }
+  .part-info .name { font-weight: 700; font-size: 0.92rem; display: flex; align-items: center; flex-wrap: wrap; gap: 5px; }
+  .part-info .brawl { font-size: 0.78rem; color: var(--muted); margin-top: 1px; }
   .part-badge { font-size: 1.3rem; line-height: 1; flex-shrink: 0; }
 
   .participante-item.gratis { background: linear-gradient(100deg, #1e1800 0%, #131000 100%); border: 1.5px solid var(--gold); box-shadow: 0 0 10px rgba(255,215,0,0.18); }
   .participante-item.gratis .part-num { color: var(--gold); }
   .participante-item.gratis .part-info .name { color: var(--gold); }
   .participante-item.gratis .part-info .brawl { color: #ccaa00; }
-
   .participante-item.desconto { background: linear-gradient(100deg, #1e1000 0%, #130b00 100%); border: 1.5px solid var(--orange); box-shadow: 0 0 10px rgba(255,140,0,0.18); }
   .participante-item.desconto .part-num { color: var(--orange); }
   .participante-item.desconto .part-info .name { color: var(--orange); }
   .participante-item.desconto .part-info .brawl { color: #dd8800; }
 
   .gratis-tag, .desconto-tag {
-    display: inline-flex; align-items: center; gap: 2px; font-size: 0.58rem; font-weight: 700;
-    letter-spacing: 0.6px; padding: 2px 6px; border-radius: 7px; text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 2px; font-size: 0.6rem; font-weight: 700;
+    letter-spacing: 0.6px; padding: 2px 7px; border-radius: 7px; text-transform: uppercase;
   }
   .gratis-tag { background: linear-gradient(135deg, #8B6914, #5a4200); color: var(--gold); border: 1px solid var(--gold); }
   .desconto-tag { background: linear-gradient(135deg, #7a4400, #4a2800); color: var(--orange); border: 1px solid var(--orange); }
-
-  .lista-loading { color: #444; font-size: 0.82rem; text-align: center; padding: 14px 0; }
+  .lista-loading { color: #444; font-size: 0.84rem; text-align: center; padding: 16px 0; }
 
   /* Ranking */
   .diario-toggle { display: flex; background: #0d0d0d; border: 1px solid #2a2a2a; border-radius: 9px; padding: 3px; margin-bottom: 14px; gap: 3px; }
-  .diario-toggle button { flex: 1; background: none; border: none; color: #555; font-family: 'Bebas Neue', sans-serif; font-size: 0.88rem; letter-spacing: 1px; padding: 8px; border-radius: 6px; cursor: pointer; }
+  .diario-toggle button { flex: 1; background: none; border: none; color: #555; font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; letter-spacing: 1px; padding: 9px; border-radius: 6px; cursor: pointer; }
   .diario-toggle button.active { background: linear-gradient(135deg, #cc1111, #7a0a0a); color: #fff; }
-  .ranking-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid #1a1a1a; }
+  .ranking-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #1a1a1a; }
   .ranking-item:last-child { border-bottom: none; }
-  .rank-pos { font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem; color: #555; min-width: 22px; }
+  .rank-pos { font-family: 'Bebas Neue', sans-serif; font-size: 0.97rem; color: #555; min-width: 24px; }
   .rank-pos.ouro { color: #FFD700; } .rank-pos.prata { color: #aaa; } .rank-pos.bronze { color: #cd7f32; }
-  .rank-nome { flex: 1; font-weight: 700; font-size: 0.88rem; color: var(--text); }
+  .rank-nome { flex: 1; font-weight: 700; font-size: 0.9rem; color: var(--text); }
   .rank-nome.gratis-nome { color: var(--gold); } .rank-nome.desconto-nome { color: var(--orange); }
-  .rank-vitorias { font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; color: #cc2222; min-width: 34px; text-align: right; }
-  .ranking-vazio { color: #444; font-size: 0.82rem; text-align: center; padding: 14px 0; }
+  .rank-vitorias { font-family: 'Bebas Neue', sans-serif; font-size: 1.07rem; color: #cc2222; min-width: 36px; text-align: right; }
+  .ranking-vazio { color: #444; font-size: 0.84rem; text-align: center; padding: 16px 0; }
 
   /* Admin */
   .admin-login-toggle { text-align: center; margin-bottom: 12px; }
   .admin-login-toggle button { background: none; border: 1px solid #1a1a1a; color: #2a2a2a; font-size: 0.68rem; padding: 4px 10px; border-radius: 6px; cursor: pointer; }
   .admin-login-toggle button:hover { color: #444; border-color: #333; }
-  .admin-login-box { display: none; background: var(--card2); border: 1px solid #1e1e1e; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-  .btn-entrar-admin { width: 100%; background: #1a1a1a; border: 1px solid #333; color: #888; border-radius: 9px; padding: 11px; font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 1px; cursor: pointer; margin-top: 4px; }
+  .admin-login-box { display: none; background: var(--card2); border: 1px solid #1e1e1e; border-radius: 12px; padding: 18px; margin-bottom: 18px; }
+  .btn-entrar-admin { width: 100%; background: #1a1a1a; border: 1px solid #333; color: #888; border-radius: 9px; padding: 12px; font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 1px; cursor: pointer; margin-top: 4px; }
   .btn-entrar-admin:hover { background: #222; color: #aaa; }
-  .admin-panel { display: none; background: var(--card2); border: 1px solid var(--red); border-radius: 14px; padding: 18px; margin-bottom: 16px; }
+  .admin-panel { display: none; background: var(--card2); border: 1px solid var(--red); border-radius: 14px; padding: 20px 18px; margin-bottom: 18px; }
   .admin-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-  .admin-panel-header h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; letter-spacing: 1px; color: #cc2222; }
+  .admin-panel-header h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 1px; color: #cc2222; }
   .btn-sair-admin { background: none; border: 1px solid #333; color: #555; font-size: 0.72rem; padding: 4px 10px; border-radius: 6px; cursor: pointer; }
   .status-badge { display: inline-block; padding: 4px 12px; border-radius: 18px; font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 14px; }
   .status-bloqueada { background: #2a0a0a; color: #cc3333; border: 1px solid #4a1010; }
   .status-liberada { background: #1e1e1e; color: #888; border: 1px solid #333; }
   .admin-panel .field input { background: #141414; border-color: #2a2a2a; }
-  .btn-admin { width: 100%; border: none; border-radius: 9px; padding: 12px; font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 1px; cursor: pointer; margin-top: 8px; }
+  .btn-admin { width: 100%; border: none; border-radius: 9px; padding: 13px; font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 1px; cursor: pointer; margin-top: 8px; }
   .btn-admin:disabled { opacity: 0.5; cursor: not-allowed; }
   .btn-liberar { background: linear-gradient(135deg, #3a3a3a, #222); color: #ccc; }
   .btn-bloquear { background: linear-gradient(135deg, #7a1a1a, #5a0d0d); color: #ffaaaa; }
@@ -226,16 +224,15 @@
   .btn-reset:hover { color: #cc3333 !important; border-color: #cc3333 !important; }
   .btn-bloquear-inscricoes { background: linear-gradient(135deg, #4a2a00, #2a1500); color: #ffbb66; margin-top: 8px; }
   .btn-liberar-inscricoes { background: linear-gradient(135deg, #1a4a1a, #0d2a0d); color: #66ff99; margin-top: 8px; }
-  .admin-sep { border: none; border-top: 1px solid #1e1e1e; margin: 14px 0 8px; }
+  .admin-sep { border: none; border-top: 1px solid #1e1e1e; margin: 16px 0 8px; }
 
   .admin-inscritos-header { display: flex; gap: 8px; margin-bottom: 12px; }
-  .admin-stat-box { flex: 1; background: #141414; border: 1px solid #2a2a2a; border-radius: 8px; padding: 9px 10px; }
-  .admin-stat-box .stat-label { font-size: 0.66rem; color: #555; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 2px; }
-  .admin-stat-box .stat-val { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; color: #cc2222; }
+  .admin-stat-box { flex: 1; background: #141414; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px 12px; }
+  .admin-stat-box .stat-label { font-size: 0.68rem; color: #555; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 2px; }
+  .admin-stat-box .stat-val { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: #cc2222; }
   .admin-stat-box.gold-stat .stat-val { color: var(--gold); }
 
-  /* Cadastro inscrito no admin — destaque pra nome real + nick separados */
-  .admin-part-item-new { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; background: #131313; border: 1px solid #222; border-radius: 8px; padding: 10px 11px; margin-bottom: 6px; }
+  .admin-part-item-new { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; background: #131313; border: 1px solid #222; border-radius: 8px; padding: 10px 12px; margin-bottom: 6px; }
   .admin-part-item-new.gratis-admin { border-color: #3a2e00; background: linear-gradient(90deg, #1a1500 0%, #131313 100%); }
   .admin-part-item-new.desconto-admin { border-color: #3a2200; background: linear-gradient(90deg, #1a0e00 0%, #131313 100%); }
   .admin-part-num { font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem; color: #cc1111; min-width: 24px; }
@@ -266,9 +263,9 @@
   .add-jogador-row { display: flex; gap: 6px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
   .add-jogador-row input { flex: 1; min-width: 90px; background: #141414; border: 1px solid #2a2a2a; border-radius: 8px; padding: 9px 12px; color: var(--text); font-size: 0.85rem; outline: none; }
   .btn-add-jogador { background: linear-gradient(135deg, #cc1111, #7a0a0a); color: #fff; border: none; border-radius: 8px; padding: 9px 14px; font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem; letter-spacing: 1px; cursor: pointer; white-space: nowrap; }
-  .vit-item-admin { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #1a1a1a; }
+  .vit-item-admin { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid #1a1a1a; }
   .vit-item-admin:last-child { border-bottom: none; }
-  .vit-nome-admin { color: #aaa; font-weight: 600; font-size: 0.86rem; }
+  .vit-nome-admin { color: #aaa; font-weight: 600; font-size: 0.88rem; }
   .vit-nome-admin.gold { color: var(--gold); } .vit-nome-admin.orange { color: var(--orange); }
   .vit-tel-admin { font-size: 0.7rem; color: #555; margin-top: 2px; }
   .vit-controls { display: flex; align-items: center; gap: 7px; }
@@ -305,8 +302,8 @@
 
   .toast {
     position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(80px);
-    background: #1a1a1a; border: 1px solid #333; color: #ccc; padding: 11px 18px;
-    border-radius: 8px; font-size: 0.85rem; z-index: 999; transition: transform 0.3s ease; white-space: nowrap;
+    background: #1a1a1a; border: 1px solid #333; color: #ccc; padding: 12px 20px;
+    border-radius: 8px; font-size: 0.87rem; z-index: 999; transition: transform 0.3s ease; white-space: nowrap;
   }
   .toast.show { transform: translateX(-50%) translateY(0); }
   .toast.success { border-color: #2ecc71; color: #2ecc71; }
@@ -320,7 +317,7 @@
 
   <div class="header">
     <h1>🔥 Diário Brawl MMA</h1>
-    <div class="sub">Inscrição • PIX • Liberação manual da sala</div>
+    <div class="sub">Cadastro • Pagamento PIX • Sala liberada pelo ADM</div>
   </div>
 
   <div class="sync-status">
@@ -355,24 +352,33 @@
     <button class="btn-sair-mini" id="btnSairConta">↩ Sair</button>
   </div>
 
-  <!-- ===== TELA 1: LOGIN (nome + celular) ===== -->
+  <!-- ===== TELA 1: LOGIN ===== -->
   <div class="card" id="loginCard">
     <div class="card-title">➜ Entrar</div>
-    <div class="card-sub">Faça login para se inscrever no campeonato. Use seu nome e celular.</div>
-    <div class="field"><label>Seu nome completo</label><input type="text" id="inputLoginNome" placeholder="Ex: João Silva"></div>
-    <div class="field"><label>Seu celular (só números)</label><input type="tel" id="inputLoginTel" placeholder="Ex: 11999998888"></div>
+    <div class="card-sub">Use seu nome e número de celular para acessar o campeonato. Esses dados identificam você no sistema.</div>
+    <div class="field">
+      <label>Seu nome completo</label>
+      <input type="text" id="inputLoginNome" placeholder="Ex: Arthur Alcântara">
+    </div>
+    <div class="field">
+      <label>Seu celular (só números)</label>
+      <input type="tel" id="inputLoginTel" placeholder="Ex: 123456789">
+    </div>
     <button class="btn-main" id="btnLogin">➜ Entrar</button>
   </div>
 
-  <!-- ===== TELA 2: GARANTIR VAGA (só nick) ===== -->
+  <!-- ===== TELA 2: GARANTIR VAGA ===== -->
   <div class="card" id="vagaCard" style="display:none;">
     <div class="card-title">🎮 Garantir vaga</div>
-    <div class="card-sub">Confirme seu nick do jogo. Depois da inscrição, vai aparecer a chave PIX.</div>
-    <div class="field"><label>Nick no jogo</label><input type="text" id="inputVagaNick" placeholder="Digite seu nick no jogo"></div>
+    <div class="card-sub">Informe seu nick no jogo para confirmar a inscrição. Após isso, a chave PIX para pagamento será exibida.</div>
+    <div class="field">
+      <label>Nick no jogo</label>
+      <input type="text" id="inputVagaNick" placeholder="Ex: ProPlayer123">
+    </div>
     <button class="btn-main" id="btnGarantirVaga">✓ Garantir minha vaga</button>
   </div>
 
-  <!-- ===== TELA PÓS-INSCRIÇÃO (compacta) ===== -->
+  <!-- ===== TELA PÓS-INSCRIÇÃO ===== -->
   <div class="pos-card" id="posCard">
     <div class="pos-card-top">
       <div class="status"><span class="dot"></span> Inscrição confirmada</div>
@@ -509,9 +515,8 @@
   var adminDiarioAtivo = 'normal';
   var lucroTab         = 'normal';
 
-  /* Conta local: nome + telefone (não é autenticação real, é só localStorage) */
-  var CONTA_NOME = 'dbrawl_conta_nome';
-  var CONTA_TEL  = 'dbrawl_conta_tel';
+  var CONTA_NOME        = 'dbrawl_conta_nome';
+  var CONTA_TEL         = 'dbrawl_conta_tel';
   var SESSION_KEY_BRAWL = 'dbrawl_brawl';
   var SESSION_KEY_INSC  = 'dbrawl_inscrito';
 
@@ -553,7 +558,7 @@
   function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function apenasDigitos(s) { return String(s || '').replace(/\D/g, ''); }
 
-  /* ===== RANKING (chave = nick, identificação real = telefone) ===== */
+  /* ===== RANKING ===== */
   function normalizarEntry(entry) {
     if (!entry) return { vitorias: 0, telefone: '', ultimoBeneficioUsado: 0 };
     if (typeof entry !== 'object') return { vitorias: Number(entry) || 0, telefone: '', ultimoBeneficioUsado: 0 };
@@ -575,6 +580,8 @@
     if (v % VITORIAS_DESCONTO === 0) return 'desconto';
     return null;
   }
+
+  /* Busca beneficio disponivel pelo TELEFONE (ignora nick) */
   function beneficioDisponivel(tel, tipo) {
     var telLimpo = apenasDigitos(tel);
     if (!telLimpo) return null;
@@ -593,11 +600,11 @@
   }
   function temGratis(tel) {
     var n = beneficioDisponivel(tel, 'normal'); if (n && n.tipo === 'gratis') return true;
-    var m = beneficioDisponivel(tel, 'mini'); return m && m.tipo === 'gratis';
+    var m = beneficioDisponivel(tel, 'mini'); return !!(m && m.tipo === 'gratis');
   }
   function temDesconto(tel) {
     if (temGratis(tel)) return false;
-    var m = beneficioDisponivel(tel, 'mini'); return m && m.tipo === 'desconto';
+    var m = beneficioDisponivel(tel, 'mini'); return !!(m && m.tipo === 'desconto');
   }
   function consumirBeneficio(tel, tipo) {
     var b = beneficioDisponivel(tel, tipo); if (!b) return;
@@ -614,7 +621,7 @@
     return null;
   }
 
-  /* ===== CONTA LOCAL (login simples por nome+tel, igual à referência) ===== */
+  /* ===== CONTA LOCAL ===== */
   function salvarConta(nome, tel) {
     try { localStorage.setItem(CONTA_NOME, nome); localStorage.setItem(CONTA_TEL, tel); } catch(e) {}
   }
@@ -628,7 +635,7 @@
     } catch(e) {}
   }
 
-  /* ===== RENDER: STATS / PROGRESSO ===== */
+  /* ===== STATS / PROGRESSO ===== */
   function renderStats(totalInscritos) {
     var restantes = Math.max(0, TOTAL_VAGAS - totalInscritos);
     document.getElementById('statInscritos').textContent = totalInscritos;
@@ -662,7 +669,6 @@
     if (!html) html = '<div class="lista-loading">Nenhum jogador inscrito ainda.</div>';
     document.getElementById('listaParticipantes').innerHTML = html;
     renderStats(arr.length);
-    document.getElementById('partCount') && (document.getElementById('partCount').textContent = arr.length);
     if (isAdmin) renderAdminLista(arr);
   }
 
@@ -932,7 +938,7 @@
     document.getElementById('vagaCard').style.display = 'block';
     document.getElementById('posCard').style.display = 'none';
   }
-  function mostrarTelaPos(brawlNick) {
+  function mostrarTelaPos() {
     document.getElementById('logadoBar').style.display = 'flex';
     document.getElementById('logadoNome').textContent = getContaNome();
     document.getElementById('loginCard').style.display = 'none';
@@ -943,19 +949,18 @@
     var g = temGratis(tel);
     var d = !g && temDesconto(tel);
     document.getElementById('tagGratis').className   = 'pos-beneficio-tag gold'   + (g ? ' show' : '');
-    document.getElementById('tagDesconto').className  = 'pos-beneficio-tag orange'+ (d ? ' show' : '');
+    document.getElementById('tagDesconto').className = 'pos-beneficio-tag orange' + (d ? ' show' : '');
     document.getElementById('pixMiniBox').style.display = g ? 'none' : 'block';
     renderSalaMini(ultimaSala);
   }
 
-  /* Decide qual tela mostrar com base no estado atual */
   function atualizarFluxoTela() {
     if (!temConta()) { mostrarTelaLogin(); return; }
     if (usuarioInscrito) { mostrarTelaPos(); return; }
     mostrarTelaGarantirVaga();
   }
 
-  /* ===== VERIFICA SE JÁ ESTÁ INSCRITO (ao carregar) ===== */
+  /* ===== VERIFICA INSCRICAO AO CARREGAR ===== */
   function verificarInscricaoAtual() {
     if (!temConta()) { mostrarTelaLogin(); return; }
     var nome = getContaNome(), tel = getContaTel();
@@ -973,7 +978,6 @@
     renderLista(ultimosPartic);
     setSync('online', 'Atualizado');
 
-    /* Re-checa se ainda está inscrito (admin pode ter removido) */
     if (temConta()) {
       var nome = getContaNome(), tel = getContaTel();
       var aindaInscrito = Object.values(ultimosPartic).some(function(p) { return p.nome === nome && apenasDigitos(p.telefone) === apenasDigitos(tel); });
@@ -989,10 +993,34 @@
       }
     }
   });
-  refSala.on('value', function(snap) { ultimaSala = snap.val(); if (usuarioInscrito) renderSalaMini(ultimaSala); if (isAdmin) renderBadge(ultimaSala); });
-  refVitNormal.on('value', function(snap) { vitoriasNormal = snap.val() || {}; if (diarioAtivo === 'normal') renderRanking(); if (isAdmin && adminDiarioAtivo === 'normal') renderAdminVit(); renderLista(ultimosPartic); if (usuarioInscrito) mostrarTelaPos(); });
-  refVitMini.on('value', function(snap) { vitoriasMini = snap.val() || {}; if (diarioAtivo === 'mini') renderRanking(); if (isAdmin && adminDiarioAtivo === 'mini') renderAdminVit(); renderLista(ultimosPartic); if (usuarioInscrito) mostrarTelaPos(); });
+
+  refSala.on('value', function(snap) {
+    ultimaSala = snap.val();
+    if (usuarioInscrito) renderSalaMini(ultimaSala);
+    if (isAdmin) renderBadge(ultimaSala);
+  });
+
+  /* CORRECAO DO BUG DE PROMOCAO:
+     Atualiza vitoriasNormal/vitoriasMini ANTES de qualquer render,
+     assim temGratis/temDesconto ja enxerga os dados novos quando
+     mostrarTelaPos() e renderLista() sao chamados. */
+  refVitNormal.on('value', function(snap) {
+    vitoriasNormal = snap.val() || {};
+    if (diarioAtivo === 'normal') renderRanking();
+    if (isAdmin && adminDiarioAtivo === 'normal') renderAdminVit();
+    renderLista(ultimosPartic);
+    if (usuarioInscrito) mostrarTelaPos();
+  });
+  refVitMini.on('value', function(snap) {
+    vitoriasMini = snap.val() || {};
+    if (diarioAtivo === 'mini') renderRanking();
+    if (isAdmin && adminDiarioAtivo === 'mini') renderAdminVit();
+    renderLista(ultimosPartic);
+    if (usuarioInscrito) mostrarTelaPos();
+  });
+
   db.ref('.info/connected').on('value', function(snap) { if (snap.val()) setSync('online', 'Online'); else setSync('error', 'Sem conexão...'); });
+
   refInscricoes.on('value', function(snap) {
     var abertas = snap.val() !== false;
     var aviso = document.getElementById('avisoBloqueado');
@@ -1009,7 +1037,7 @@
     }
   });
 
-  /* ===== LOGIN (tela 1) ===== */
+  /* ===== LOGIN ===== */
   document.getElementById('btnLogin').addEventListener('click', function() {
     var nome = document.getElementById('inputLoginNome').value.trim();
     var tel  = apenasDigitos(document.getElementById('inputLoginTel').value.trim());
@@ -1020,12 +1048,15 @@
     document.getElementById('inputLoginTel').value = '';
     verificarInscricaoAtual();
   });
+  document.getElementById('inputLoginNome').addEventListener('keydown', function(e) { if (e.key === 'Enter') document.getElementById('inputLoginTel').focus(); });
+  document.getElementById('inputLoginTel').addEventListener('keydown', function(e) { if (e.key === 'Enter') document.getElementById('btnLogin').click(); });
+
   document.getElementById('btnSairConta').addEventListener('click', function() {
     if (!confirm('Sair da conta?')) return;
     sairConta(); usuarioInscrito = false; atualizarFluxoTela();
   });
 
-  /* ===== GARANTIR VAGA (tela 2) ===== */
+  /* ===== GARANTIR VAGA ===== */
   document.getElementById('btnGarantirVaga').addEventListener('click', function() {
     var nick = document.getElementById('inputVagaNick').value.trim();
     if (!nick) { toast('Digite seu nick no jogo!', 'error'); return; }
@@ -1058,8 +1089,9 @@
       });
     });
   });
+  document.getElementById('inputVagaNick').addEventListener('keydown', function(e) { if (e.key === 'Enter') document.getElementById('btnGarantirVaga').click(); });
 
-  /* ===== CANCELAR (na tela pós-inscrição) ===== */
+  /* ===== CANCELAR ===== */
   document.getElementById('btnCancelarInscricao').addEventListener('click', function() {
     if (!confirm('⚠️ Você PERDERÁ sua inscrição. Deseja continuar?')) return;
     var nome = getContaNome(), tel = getContaTel();
@@ -1126,7 +1158,7 @@
   document.getElementById('inputNovoJogador').addEventListener('keydown', function(e) { if (e.key === 'Enter') document.getElementById('inputNovoTelefone').focus(); });
   document.getElementById('inputNovoTelefone').addEventListener('keydown', function(e) { if (e.key === 'Enter') document.getElementById('btnAddJogador').click(); });
 
-  /* ===== INSCRIÇÕES BLOQUEAR/LIBERAR ===== */
+  /* ===== INSCRICOES ===== */
   document.getElementById('btnBloquearInscricoes').addEventListener('click', function() { refInscricoes.set(false, function(err) { if (err) toast('Erro!','error'); else toast('🚫 Bloqueadas!'); }); });
   document.getElementById('btnLiberarInscricoes').addEventListener('click', function() { refInscricoes.set(true, function(err) { if (err) toast('Erro!','error'); else toast('✅ Liberadas!','success'); }); });
 
