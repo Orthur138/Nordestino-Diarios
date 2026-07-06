@@ -153,11 +153,14 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
   border-radius:12px;padding:14px 16px;margin-bottom:12px;}
 .pix-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:1.5px;
   color:var(--gold);margin-bottom:10px;text-align:center;}
-.pix-row{display:flex;justify-content:space-between;align-items:center;
+.pix-row{display:flex;justify-content:space-between;align-items:center;gap:8px;
   padding:7px 0;border-bottom:1px solid #2a2200;}
 .pix-row:last-child{border-bottom:none;}
-.pix-nome{font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:1px;color:var(--gold);}
-.pix-key{font-size:.74rem;color:#aa8800;word-break:break-all;text-align:right;max-width:65%;}
+.pix-nome{font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:1px;color:var(--gold);flex-shrink:0;}
+.pix-key{font-size:.74rem;color:#aa8800;word-break:break-all;text-align:right;flex:1;}
+.btn-copiar-pix{background:none;border:1px solid #5a4400;color:#cc9900;border-radius:6px;
+  padding:5px 8px;cursor:pointer;font-size:.68rem;white-space:nowrap;flex-shrink:0;}
+.btn-copiar-pix:hover{border-color:var(--gold);color:var(--gold);background:#1a1500;}
 
 .sala-box{background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:14px 16px;}
 .sm-fechada{text-align:center;padding:6px 0;}
@@ -289,6 +292,7 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
   font-weight:700;letter-spacing:.6px;padding:1px 5px;border-radius:5px;text-transform:uppercase;}
 .gratis-tag{background:linear-gradient(135deg,#8B6914,#5a4200);color:var(--gold);border:1px solid var(--gold);}
 .desconto-tag{background:linear-gradient(135deg,#7a4400,#4a2800);color:var(--orange);border:1px solid var(--orange);}
+.gratis-tag.usada,.desconto-tag.usada{opacity:.65;filter:grayscale(.15);}
 
 .admin-vitorias-section h4{font-family:'Bebas Neue',sans-serif;font-size:.98rem;color:#666;letter-spacing:1px;margin-bottom:8px;}
 .admin-vitorias-section .hint{font-size:.7rem;color:#555;margin-bottom:10px;line-height:1.4;}
@@ -619,9 +623,9 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     </div>
     <div class="pix-box" id="pixMiniBox">
       <div class="pix-title">📣 Envie o PIX para o ADM da sala</div>
-      <div class="pix-row"><span class="pix-nome">🟡 Arthur</span><span class="pix-key">arthursant792@gmail.com</span></div>
-      <div class="pix-row"><span class="pix-nome">🟢 João</span><span class="pix-key">camilasouza123@hotmail.com</span></div>
-      <div class="pix-row"><span class="pix-nome">🟣 Arturo</span><span class="pix-key">70736905260</span></div>
+      <div class="pix-row"><span class="pix-nome">🟡 Arthur</span><span class="pix-key">arthursant792@gmail.com</span><button class="btn-copiar-pix" onclick="copiarChave('arthursant792@gmail.com')">📋</button></div>
+      <div class="pix-row"><span class="pix-nome">🟢 Malaquias</span><span class="pix-key">malaquiasbonito9@gmail.com</span><button class="btn-copiar-pix" onclick="copiarChave('malaquiasbonito9@gmail.com')">📋</button></div>
+      <div class="pix-row"><span class="pix-nome">🟣 Arturo</span><span class="pix-key">70736905260</span><button class="btn-copiar-pix" onclick="copiarChave('70736905260')">📋</button></div>
     </div>
     <div class="sala-box">
       <div id="salaMiniFechada" class="sm-fechada"><span class="sm-lock">🔒</span><div class="sm-titulo">SALA FECHADA</div><div class="sm-sub">Aguarde o admin liberar...</div></div>
@@ -645,6 +649,13 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
       </div>
       <div id="rankingLista"><div class="rank-empty">Carregando...</div></div>
     </div>
+  </div>
+
+  <!-- Salas dinâmicas (lobby) -->
+  <div class="bottom-card" style="margin:0 16px 12px;">
+    <div class="bc-head"><div class="bc-title">🚪 Outras Salas</div><div class="bc-count" id="salasDinCount">0</div></div>
+    <p style="font-size:.72rem;color:#555;margin-bottom:10px;">Toque numa sala pra entrar no lobby e confirmar sua inscrição.</p>
+    <div id="salasDinamicasList"><div class="salas-empty">Nenhuma sala extra criada ainda.</div></div>
   </div>
 
   <!-- Botões admin: só aparecem para adm-salas -->
@@ -797,7 +808,7 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     <hr class="admin-sep">
     <div class="admin-vitorias-section">
       <h4>🚪 Criar Nova Sala</h4>
-      <p class="hint">Salas criadas ficam visíveis para os jogadores na aba Salas.</p>
+      <p class="hint">Salas criadas ficam visíveis para os jogadores na aba Salas, dentro de "Outras Salas". O jogador toca na sala, entra no lobby e confirma a inscrição por lá (com desconto automático do saldo).</p>
       <div class="field" style="margin-bottom:8px;"><label>Nome da sala</label><input type="text" id="inputNomeSala" placeholder="Ex: Brawl do Brô"></div>
       <div class="field" style="margin-bottom:8px;"><label>Valor da entrada (R$)</label><input type="number" id="inputValorSala" placeholder="Ex: 5,00" min="1" step="0.01"></div>
       <div class="field" style="margin-bottom:8px;"><label>Vagas (opcional)</label><input type="number" id="inputVagasSala" placeholder="Deixe em branco para sem limite" min="2" step="1"></div>
@@ -848,8 +859,10 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
   var diarioAtivo='normal', adminDiarioAtivo='normal', lucroTab='normal';
   var CONTA_NOME='dbrawl_conta_nome', CONTA_TEL='dbrawl_conta_tel', CONTA_NICK='dbrawl_conta_nick';
   var TIPOS_LUCRO=['normal','mini','especial','1v1'];
-  var ADMS=['Arthur','Joao','Arturo'];
-  var ADMS_DISPLAY={'Arthur':'Arthur','Joao':'João','Arturo':'Arturo'};
+  var ADMS=['Arthur','Malaquias','Arturo'];
+  var ADMS_DISPLAY={'Arthur':'Arthur','Malaquias':'Malaquias','Arturo':'Arturo'};
+  var salasDinamicas={};
+  var modalSalaAtualId=null;
 
   firebase.initializeApp({
     apiKey:"AIzaSyBNf-tB5gGIqnFRebN-YTV6jhzLy1leEXM",
@@ -963,9 +976,16 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     ref.update(upd);
   }
   function consumirBeneficiosAoInscrever(tel){consumirBeneficio(tel,'normal');consumirBeneficio(tel,'mini');}
+  /* beneficioEfetivo: prioriza o benefício manual do admin, depois o benefício
+     automático GRAVADO no momento da inscrição (beneficioAuto), e só por último
+     recalcula ao vivo (usado como fallback pra registros antigos). Isso evita que
+     o selo "grátis" suma da lista de Inscritos assim que o benefício é consumido. */
   function beneficioEfetivo(p){
     if(p.beneficioManual==='gratis')return'gratis';
     if(p.beneficioManual==='desconto')return'desconto';
+    if(p.beneficioAuto==='gratis')return'gratis';
+    if(p.beneficioAuto==='desconto')return'desconto';
+    if(p.beneficioAuto===null||p.beneficioAuto==='none')return null;
     if(temGratis(p.telefone))return'gratis';
     if(temDesconto(p.telefone))return'desconto';
     return null;
@@ -1001,7 +1021,7 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
         html+='<div class="inscrito-item'+cls+'">';
         html+='<span class="in-num">'+(i+1)+'°</span>';
         html+='<span class="in-nome">'+esc(p.brawl||p.nome)+'</span>';
-        if(g)html+='<span class="gratis-tag">🏆 Grátis</span>';
+        if(g)html+='<span class="gratis-tag">🏆 Entrada Grátis</span>';
         else if(d)html+='<span class="desconto-tag">🔥 R$2</span>';
         html+='</div>';
       }
@@ -1013,19 +1033,26 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     if(isAdmin)renderAdminLista(arr);
   }
 
-  /* NOME NO RANKING */
+  /* NOME NO RANKING (público) — nunca expõe o nome verdadeiro da conta.
+     Prioriza o nick do Brawl usado na inscrição atual, depois o nick salvo no
+     perfil, e só usa um identificador mascarado com os 4 últimos dígitos do
+     telefone caso a pessoa ainda não tenha definido nenhum nick. */
+  function mascararTel(tel){
+    var t=dig(tel);
+    if(t.length<4)return'Jogador ****';
+    return'Jogador ****'+t.slice(-4);
+  }
   function nomeRankingPorTel(tel){
     var telL=dig(tel);
     var partic=Object.values(ultimosPartic);
     for(var i=0;i<partic.length;i++){
       if(dig(partic[i].telefone)===telL&&partic[i].brawl)return partic[i].brawl;
     }
-    var obj=diarioAtivo==='mini'?vitoriasMini:vitoriasNormal;
-    var d=obj[telL]?normEntry(obj[telL]):null;
-    if(d&&d.nome)return d.nome;
-    if(contasRegistradas[telL]&&contasRegistradas[telL].nome)return contasRegistradas[telL].nome;
-    return tel;
+    if(contasRegistradas[telL]&&contasRegistradas[telL].nick)return contasRegistradas[telL].nick;
+    return mascararTel(telL);
   }
+  /* Nome no painel do ADMIN — aqui pode mostrar o nome real, pois é uso interno
+     de gerenciamento (o admin precisa identificar quem é quem). */
   function nomeRankingAdminPorTel(tel){
     var telL=dig(tel);
     var obj=adminDiarioAtivo==='mini'?vitoriasMini:vitoriasNormal;
@@ -1056,13 +1083,17 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
       var item=arr[i];
       var posClass=i===0?'ouro':i===1?'prata':i===2?'bronze':'';
       var ben=diarioAtivo==='mini'?tipoBenMini(item.v):tipoBenNormal(item.v);
-      var disp=ben&&item.usado<item.v;
-      var isG=disp&&ben==='gratis', isD=disp&&ben==='desconto';
+      /* Se bateu o número de vitórias que dá o benefício, sempre mostra o selo —
+         diferenciando visualmente se ainda está disponível pra usar ou se já foi
+         usado numa inscrição (em vez de simplesmente sumir o selo). */
+      var jaUsado=ben&&item.usado>=item.v;
+      var disponivel=ben&&item.usado<item.v;
+      var isG=(disponivel||jaUsado)&&ben==='gratis', isD=(disponivel||jaUsado)&&ben==='desconto';
       html+='<div class="rank-item">';
       html+='<div class="rank-pos '+posClass+'">'+(i+1)+'°</div>';
       html+='<div class="rank-nome'+(isG?' gratis-nome':(isD?' desconto-nome':''))+'">'+esc(item.nome)+'</div>';
-      if(isG)html+='<span class="gratis-tag">🏆 Grátis</span>';
-      else if(isD)html+='<span class="desconto-tag">🔥 R$2</span>';
+      if(isG)html+='<span class="gratis-tag'+(jaUsado?' usada':'')+'">🏆 '+(jaUsado?'Grátis usada':'Grátis')+'</span>';
+      else if(isD)html+='<span class="desconto-tag'+(jaUsado?' usada':'')+'">🔥 '+(jaUsado?'R$2 usado':'R$2')+'</span>';
       html+='<div class="rank-vit">'+item.v+'v</div>';
       html+='</div>';
     }
@@ -1366,6 +1397,95 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     if(isAdmin)renderBadge(salaData);
   }
 
+  /* SALAS DINÂMICAS (LOBBY) — jogador toca numa sala, entra no "lobby" (modal),
+     confere as informações e confirma a inscrição. O valor é debitado direto do
+     saldo da carteira ao confirmar. */
+  function formatBRLLocal(v){return'R$ '+Number(v||0).toFixed(2).replace('.',',');}
+  function renderSalasUser(data){
+    var el=document.getElementById('salasDinamicasList'); if(!el)return;
+    var keys=Object.keys(data||{});
+    document.getElementById('salasDinCount').textContent=keys.length;
+    if(!keys.length){el.innerHTML='<div class="salas-empty">Nenhuma sala extra criada ainda.</div>';return;}
+    var tel=getTel();
+    var html='';
+    keys.forEach(function(k){
+      var s=data[k];
+      var inscritos=s.inscritos||{};
+      var totalInsc=Object.keys(inscritos).length;
+      var cheia=s.vagas&&totalInsc>=s.vagas;
+      var aberta=s.status==='aberta'&&!cheia;
+      var jaInscrito=tel&&!!inscritos[dig(tel)];
+      var badgeCls=jaInscrito?'aberta':(cheia?'cheia':(s.status==='aberta'?'aberta':'fechada'));
+      var badgeTxt=jaInscrito?'Você entrou':(cheia?'Cheia':(s.status==='aberta'?'Aberta':'Fechada'));
+      html+='<div class="sala-card" onclick="abrirModalSala(\''+k+'\')">';
+      html+='<div class="sala-card-top"><span class="sala-card-nome">'+esc(s.nome||'Sala')+'</span><span class="sala-badge '+badgeCls+'">'+badgeTxt+'</span></div>';
+      html+='<div class="sala-card-info">';
+      html+='<span class="sala-info-item">👥 <strong>'+totalInsc+(s.vagas?('/'+s.vagas):'')+'</strong></span>';
+      html+='<span class="sala-preco">'+formatBRLLocal(s.valor)+'</span>';
+      html+='</div></div>';
+    });
+    el.innerHTML=html;
+  }
+  window.abrirModalSala=function(salaId){
+    var s=salasDinamicas[salaId]; if(!s){toast('Sala não encontrada.','error');return;}
+    if(!temConta()){toast('Faça login primeiro!','error');return;}
+    modalSalaAtualId=salaId;
+    document.getElementById('modalSalaNome').textContent='🚪 '+(s.nome||'Sala');
+    var inscritos=s.inscritos||{};
+    var totalInsc=Object.keys(inscritos).length;
+    var tel=getTel();
+    var jaInscrito=!!inscritos[dig(tel)];
+    var cheia=s.vagas&&totalInsc>=s.vagas&&!jaInscrito;
+    document.getElementById('modalSalaInfo').textContent='Entrada: '+formatBRLLocal(s.valor)+' · Vagas: '+totalInsc+(s.vagas?('/'+s.vagas):' (sem limite'+(s.vagas?'':'')+' )');
+    var btn=document.getElementById('btnConfirmarSala');
+    var okBox=document.getElementById('modalSaldoOk'), insufBox=document.getElementById('modalSaldoInsuf');
+    if(jaInscrito){
+      okBox.style.display='none'; insufBox.style.display='none';
+      btn.disabled=true; btn.textContent='✓ Você já está inscrito';
+      document.getElementById('modalSala').className='modal-overlay show';
+      return;
+    }
+    if(s.status!=='aberta'||cheia){
+      okBox.style.display='none'; insufBox.style.display='block';
+      document.getElementById('modalSaldoInsuf').textContent=cheia?'🚫 Sala cheia — sem vagas disponíveis.':'🔒 Sala fechada pelo admin.';
+      btn.disabled=true; btn.textContent='Indisponível';
+      document.getElementById('modalSala').className='modal-overlay show';
+      return;
+    }
+    getSaldo(function(saldo){
+      var suficiente=saldo>=Number(s.valor||0);
+      okBox.style.display=suficiente?'block':'none';
+      insufBox.style.display=suficiente?'none':'block';
+      document.getElementById('modalSaldoInsuf').textContent='⚠️ Saldo insuficiente. Deposite na Carteira antes de se inscrever.';
+      btn.disabled=!suficiente;
+      btn.textContent='✓ Confirmar inscrição';
+      document.getElementById('modalSala').className='modal-overlay show';
+    });
+  };
+  document.getElementById('btnConfirmarSala').addEventListener('click',function(){
+    if(!modalSalaAtualId)return;
+    var salaId=modalSalaAtualId, s=salasDinamicas[salaId]; if(!s)return;
+    var tel=getTel(), nome=getNome(), nick=getNick();
+    if(!tel){toast('Faça login primeiro!','error');return;}
+    getSaldo(function(saldo){
+      var valor=Number(s.valor||0);
+      if(saldo<valor){toast('Saldo insuficiente!','error');return;}
+      var btn=document.getElementById('btnConfirmarSala');
+      btn.disabled=true; btn.textContent='Confirmando...';
+      var updates={};
+      updates['carteiras/'+tel+'/saldo']=saldo-valor;
+      var histKey='carteiras/'+tel+'/historico/'+Date.now();
+      updates[histKey]={tipo:'saida',desc:'Inscrição na sala "'+(s.nome||'Sala')+'"',valor:valor,ts:Date.now()};
+      updates['salas-dinamicas/'+salaId+'/inscritos/'+dig(tel)]={nome:nome,brawl:nick||'',telefone:dig(tel),ts:Date.now()};
+      db.ref().update(updates,function(err){
+        btn.disabled=false; btn.textContent='✓ Confirmar inscrição';
+        if(err){toast('Erro: '+err.message,'error');return;}
+        toast('✅ Inscrito na sala "'+(s.nome||'Sala')+'"!','success');
+        fecharModalSala();
+      });
+    });
+  });
+
   /* NAV TABS */
   function mostrarNavTabs(show){
     document.getElementById('navTabs').style.display=show?'flex':'none';
@@ -1444,6 +1564,7 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     renderAdminVit(); renderAdminContas(); renderSelectJogadores(); renderSelectPremio();
     setLucroTab('normal');
     renderDepositosPendentes();
+    renderAdminSalas(salasDinamicas);
     refInscricoes.once('value',function(snap2){
       var abertas=snap2.val()!==false;
       var bB=document.getElementById('btnBloquearInscricoes'), bL=document.getElementById('btnLiberarInscricoes');
@@ -1525,6 +1646,11 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
       if(bL)bL.style.display=abertas?'none':'inline-block';
     }
   });
+  refSalas.on('value',function(snap){
+    salasDinamicas=snap.val()||{};
+    renderSalasUser(salasDinamicas);
+    if(isAdmin)renderAdminSalas(salasDinamicas);
+  });
 
   /* ===== EVENTOS ===== */
 
@@ -1554,7 +1680,9 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     atualizarTela();
   });
 
-  /* Garantir vaga — sem checagem de saldo, pagamento é manual via PIX */
+  /* Garantir vaga — sem checagem de saldo, pagamento é manual via PIX.
+     Grava beneficioAuto no momento da inscrição para preservar o selo de
+     grátis/desconto na lista de Inscritos mesmo depois de consumir o benefício. */
   document.getElementById('btnGarantirVaga').addEventListener('click',function(){
     var nome=getNome(), tel=getTel();
     var nickInput=document.getElementById('inputVagaNick');
@@ -1577,13 +1705,14 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
   function inscreverJogador(nome,tel,brawl){
     var btn=document.getElementById('btnGarantirVaga');
     btn.disabled=true; btn.textContent='Inscrevendo...';
-    refPartic.push({nome:nome,brawl:brawl,telefone:tel},function(err){
+    var g=temGratis(tel), d=!g&&temDesconto(tel);
+    var beneficioAuto=g?'gratis':(d?'desconto':'none');
+    refPartic.push({nome:nome,brawl:brawl,telefone:tel,beneficioAuto:beneficioAuto},function(err){
       btn.disabled=false; btn.textContent='✓ Garantir minha vaga';
       if(err){toast('Erro ao inscrever.','error');return;}
       usuarioInscrito=true;
       consumirBeneficiosAoInscrever(tel);
       mostrarPos();
-      var g=temGratis(tel);
       if(g)toast('🏆 Inscrição com entrada GRÁTIS!','gold');
       else toast('✅ Inscrição confirmada! Envie o PIX pro admin.','success');
     });
@@ -1785,6 +1914,10 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     if(navigator.clipboard){navigator.clipboard.writeText(chave).then(function(){toast('✅ Chave copiada!','success');});}
     else{toast('Copie: '+chave);}
   };
+  window.copiarChave=function(chave){
+    if(navigator.clipboard){navigator.clipboard.writeText(chave).then(function(){toast('✅ Chave copiada!','success');});}
+    else{toast('Copie: '+chave);}
+  };
 
   document.getElementById('btnEnviarDep').addEventListener('click',function(){
     var tel=getTel(), nome=getNome();
@@ -1957,17 +2090,14 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
   });
 
   /* ADMIN: SALAS DINÂMICAS */
-  refSalas.on('value',function(snap){
-    var data=snap.val()||{};
-    if(isAdmin)renderAdminSalas(data);
-  });
   function renderAdminSalas(data){
     var el=document.getElementById('adminSalasList'); if(!el)return;
     if(!data||!Object.keys(data).length){el.innerHTML='<div class="vitorias-lista-admin-empty">Nenhuma sala criada.</div>';return;}
     var html='';
     Object.keys(data).forEach(function(k){
       var s=data[k];
-      var vagasTxt=(s.vagas===null||s.vagas===undefined||s.vagas==='')?'sem limite':(((s.inscritos&&Object.keys(s.inscritos).length)||0)+'/'+s.vagas+' jogadores');
+      var totalInsc=(s.inscritos&&Object.keys(s.inscritos).length)||0;
+      var vagasTxt=(s.vagas===null||s.vagas===undefined||s.vagas==='')?(totalInsc+' jogadores (sem limite)'):(totalInsc+'/'+s.vagas+' jogadores');
       html+='<div class="hist-item" style="flex-wrap:wrap;gap:6px;">';
       html+='<div class="hist-body"><div class="hist-desc">'+esc(s.nome||'?')+'</div>';
       html+='<div class="hist-data">'+formatBRL(s.valor)+' · '+vagasTxt+'</div></div>';
@@ -2035,6 +2165,7 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
   /* MODAL SALA */
   window.fecharModalSala=function(){
     document.getElementById('modalSala').className='modal-overlay';
+    modalSalaAtualId=null;
   };
 
   /* INIT */
