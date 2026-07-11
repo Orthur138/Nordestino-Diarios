@@ -590,6 +590,7 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
   <nav class="nav-tabs" id="navTabs" style="display:none;">
     <button class="nav-tab active" onclick="setTab('salas')" id="tabBtnSalas">🏠 Salas</button>
     <button class="nav-tab" onclick="setTab('carteira')" id="tabBtnCarteira">💰 Carteira</button>
+    <button class="nav-tab" onclick="setTab('ranking')" id="tabBtnRanking">🏆 Ranking</button>
     <button class="nav-tab" onclick="setTab('perfil')" id="tabBtnPerfil">👤 Perfil</button>
     <button class="nav-tab" onclick="setTab('lucro')" id="tabBtnLucro" style="display:none;">📊 Lucro</button>
   </nav>
@@ -670,6 +671,31 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     </div>
   </div>
 
+  <!-- SALAS HUB — navegador de salas estilo "servidores". Fica logo no topo da
+       aba Salas (antes do login/garantir vaga), pra quem entra já ver as salas
+       disponíveis de cara. -->
+  <div class="salas-hub-break">
+    <div class="salas-hub-inner">
+      <div class="salas-manage-col" id="salasManageCol" style="display:none;">
+        <div class="manage-card">
+          <div class="card-head"><span class="ch-icon">🛠️</span><h2>Manusear Sala</h2></div>
+          <div class="card-sub">Crie e gerencie as salas que todo mundo vê na lista ao lado.</div>
+          <div class="field"><label>Nome da sala</label><input type="text" id="inputNomeSala" placeholder="Ex: Caverna Convulsiva"></div>
+          <div class="field"><label>Valor da entrada (R$)</label><input type="number" id="inputValorSala" placeholder="Ex: 5,00" min="1" step="0.01"></div>
+          <div class="field"><label>Vagas (opcional)</label><input type="number" id="inputVagasSala" placeholder="Deixe em branco para sem limite" min="2" step="1"></div>
+          <button class="btn-main" id="btnCriarSala">+ Criar Sala</button>
+          <div class="manage-sep-title">📋 Minhas Salas</div>
+          <div id="adminSalasList"></div>
+        </div>
+      </div>
+      <div class="salas-list-col">
+        <div class="salas-hub-head"><div class="bc-title">🚪 Salas Disponíveis</div><div class="bc-count" id="salasDinCount">0</div></div>
+        <p class="salas-hint">Toque em "Entrar na sala" pra abrir o lobby e confirmar sua inscrição.</p>
+        <div id="salasDinamicasList" class="salas-grid"><div class="salas-empty">Sem salas no momento.</div></div>
+      </div>
+    </div>
+  </div>
+
   <!-- Tela 1: Login -->
   <div class="mma-card" id="loginCard">
     <div class="card-head"><span class="ch-icon">🔐</span><h2>Entrar</h2></div>
@@ -725,37 +751,6 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
       </div>
       <div id="listaParticipantes"><div class="inscritos-empty">Carregando...</div></div>
     </div>
-    <div class="bottom-card">
-      <div class="bc-head"><div class="bc-title">🏆 Ranking</div></div>
-      <div class="rank-toggle">
-        <button id="btnTogNormal" class="active" onclick="setDiarioAtivo('normal')">🎯 Normal</button>
-        <button id="btnTogMini" onclick="setDiarioAtivo('mini')">⚡ Mini</button>
-      </div>
-      <div id="rankingLista"><div class="rank-empty">Carregando...</div></div>
-    </div>
-  </div>
-
-  <!-- SALAS HUB — navegador de salas estilo "servidores" -->
-  <div class="salas-hub-break">
-    <div class="salas-hub-inner">
-      <div class="salas-manage-col" id="salasManageCol" style="display:none;">
-        <div class="manage-card">
-          <div class="card-head"><span class="ch-icon">🛠️</span><h2>Manusear Sala</h2></div>
-          <div class="card-sub">Crie e gerencie as salas que todo mundo vê na lista ao lado.</div>
-          <div class="field"><label>Nome da sala</label><input type="text" id="inputNomeSala" placeholder="Ex: Caverna Convulsiva"></div>
-          <div class="field"><label>Valor da entrada (R$)</label><input type="number" id="inputValorSala" placeholder="Ex: 5,00" min="1" step="0.01"></div>
-          <div class="field"><label>Vagas (opcional)</label><input type="number" id="inputVagasSala" placeholder="Deixe em branco para sem limite" min="2" step="1"></div>
-          <button class="btn-main" id="btnCriarSala">+ Criar Sala</button>
-          <div class="manage-sep-title">📋 Minhas Salas</div>
-          <div id="adminSalasList"></div>
-        </div>
-      </div>
-      <div class="salas-list-col">
-        <div class="salas-hub-head"><div class="bc-title">🚪 Salas Disponíveis</div><div class="bc-count" id="salasDinCount">0</div></div>
-        <p class="salas-hint">Toque em "Entrar na sala" pra abrir o lobby e confirmar sua inscrição.</p>
-        <div id="salasDinamicasList" class="salas-grid"><div class="salas-empty">Sem salas no momento.</div></div>
-      </div>
-    </div>
   </div>
 
   <!-- Botões admin: só aparecem para adm-salas -->
@@ -809,6 +804,18 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
 
     <div class="carteira-section" id="csecHist">
       <div id="historicoLista"><div class="hist-empty">Carregando...</div></div>
+    </div>
+  </div>
+
+  <!-- ABA: RANKING -->
+  <div class="tab-page" id="tabRanking">
+    <div class="bottom-card" style="margin:12px 16px;">
+      <div class="bc-head"><div class="bc-title">🏆 Ranking</div></div>
+      <div class="rank-toggle">
+        <button id="btnTogNormal" class="active" onclick="setDiarioAtivo('normal')">🎯 Normal</button>
+        <button id="btnTogMini" onclick="setDiarioAtivo('mini')">⚡ Mini</button>
+      </div>
+      <div id="rankingLista"><div class="rank-empty">Carregando...</div></div>
     </div>
   </div>
 
@@ -1639,13 +1646,14 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     document.getElementById('navTabs').style.display=show?'flex':'none';
   }
   window.setTab=function(tab){
-    ['salas','carteira','perfil','lucro'].forEach(function(t){
+    ['salas','carteira','ranking','perfil','lucro'].forEach(function(t){
       var pg=document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1));
       var btn=document.getElementById('tabBtn'+t.charAt(0).toUpperCase()+t.slice(1));
       if(pg)pg.className='tab-page'+(t===tab?' active':'');
       if(btn)btn.className='nav-tab'+(t===tab?' active':'');
     });
     if(tab==='carteira')renderCarteira();
+    if(tab==='ranking')renderRanking();
     if(tab==='perfil')renderPerfil();
     if(tab==='lucro'&&isAdminAccount)setLucroTab(lucroTab||'normal');
   };
