@@ -531,6 +531,9 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
 
 /* Config Salas — linhas por sala */
 .sala-row-admin{background:#131313;border:1px solid #222;border-radius:10px;padding:12px;margin-bottom:10px;}
+.admin-inscrito-row{display:flex;align-items:center;justify-content:space-between;gap:8px;
+  background:#0d0d0d;border:1px solid #222;border-radius:8px;padding:8px 10px;margin-bottom:6px;}
+.admin-inscrito-nome{font-size:.82rem;color:var(--text);}
 .sala-row-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px;flex-wrap:wrap;}
 .sala-row-nome{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.8px;color:var(--text);}
 .sala-row-info{font-size:.72rem;color:var(--muted);margin-bottom:6px;}
@@ -669,13 +672,8 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
         <div><div class="bp-title">Meia Entrada — R$ 2</div><div class="bp-sub">Suas vitórias garantiram 50% de desconto. Pague apenas R$2 desta vez!</div></div>
       </div>
       <div class="pix-box" id="pixMiniBox">
-        <div class="pix-title">📣 Escolha o ADM e envie o PIX</div>
-        <div class="pix-select-row">
-          <button class="btn-pix-escolher" onclick="mostrarPixAdmin('🟡 Arthur','arthursant792@gmail.com')">🟡 Arthur</button>
-          <button class="btn-pix-escolher" onclick="mostrarPixAdmin('🟢 Malaquias','malaquiasbonito9@gmail.com')">🟢 Malaquias</button>
-          <button class="btn-pix-escolher" onclick="mostrarPixAdmin('🟣 Arturo','70736905260')">🟣 Arturo</button>
-        </div>
-        <div id="pixRevelado" class="pix-reveal" style="display:none;"></div>
+        <div class="pix-title">📣 Envie o PIX pro admin</div>
+        <div id="pixAdminInfo"></div>
       </div>
       <div class="sala-box">
         <div id="salaMiniFechada" class="sm-fechada"><span class="sm-lock">🔒</span><div class="sm-titulo">SALA FECHADA</div><div class="sm-sub">Aguarde o admin liberar...</div></div>
@@ -710,6 +708,13 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
       <div class="field"><label>Nome da sala</label><input type="text" id="inputNomeSala" placeholder="Ex: Caverna Convulsiva"></div>
       <div class="field"><label>Valor da entrada (R$)</label><input type="number" id="inputValorSala" placeholder="Ex: 5,00" min="1" step="0.01"></div>
       <div class="field"><label>Vagas (opcional)</label><input type="number" id="inputVagasSala" placeholder="Deixe em branco para sem limite" min="2" step="1"></div>
+      <div class="field"><label>Pix para receber (admin)</label>
+        <select id="inputPixAdminSala">
+          <option value="0">🟡 Arthur</option>
+          <option value="1">🟢 Malaquias</option>
+          <option value="2">🟣 Arturo</option>
+        </select>
+      </div>
       <button class="btn-main" id="btnCriarSala">+ Criar Sala</button>
       <div class="manage-sep-title">📋 Minhas Salas</div>
       <div id="adminSalasList"></div>
@@ -1410,16 +1415,13 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     });
   };
 
-  /* PIX — escolher e revelar a chave de apenas um admin por vez, pra evitar
-     que o jogador pague pra pessoa errada. */
-  window.mostrarPixAdmin=function(nomeLabel,chave){
-    var el=document.getElementById('pixRevelado'); if(!el)return;
-    el.innerHTML='<div class="pix-row"><span class="pix-nome">'+esc(nomeLabel)+'</span><span class="pix-key">'+esc(chave)+'</span><button class="btn-copiar-pix" onclick="copiarChave(\''+chave+'\')">📋</button></div>';
-    el.style.display='block';
-  };
-
   /* ===== SALAS DINÂMICAS + FLUXO DE ENTRAR NA SALA ===== */
-  var SALA_ICONS=['🏚️','🌵','🌅','🔥','🎸','⭐','🐦'];
+  var SALA_ICONS=['🏠','🌵','🌅','🔥','🎸','⭐','🐦'];
+  var ADMIN_PIX_OPTIONS=[
+    {label:'🟡 Arthur',chave:'arthursant792@gmail.com'},
+    {label:'🟢 Malaquias',chave:'malaquiasbonito9@gmail.com'},
+    {label:'🟣 Arturo',chave:'70736905260'}
+  ];
   function renderSalasUser(data){
     var el=document.getElementById('salasDinamicasList'); if(!el)return;
     var keys=Object.keys(data||{});
@@ -1502,8 +1504,11 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
       document.getElementById('bannerGratis').className='banner-promo gold'+(g?' show':'');
       document.getElementById('bannerDesconto').className='banner-promo orange'+(d?' show':'');
       document.getElementById('pixMiniBox').style.display=g?'none':'block';
-      var pixRev=document.getElementById('pixRevelado');
-      pixRev.style.display='none'; pixRev.innerHTML='';
+      var pixInfo=document.getElementById('pixAdminInfo');
+      if(pixInfo){
+        var pixLabel=s.pixAdmin||'🟡 Arthur', pixChave=s.pixChave||'arthursant792@gmail.com';
+        pixInfo.innerHTML='<div class="pix-row"><span class="pix-nome">'+esc(pixLabel)+'</span><span class="pix-key">'+esc(pixChave)+'</span><button class="btn-copiar-pix" onclick="copiarChave(\''+pixChave+'\')">📋</button></div>';
+      }
       var aberta=!!(s.linkAberto&&s.link);
       document.getElementById('salaMiniFechada').style.display=aberta?'none':'block';
       document.getElementById('salaMiniAberta').style.display=aberta?'block':'none';
@@ -2070,6 +2075,17 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
       html+='<div class="admin-quick-row" style="margin-bottom:6px;">';
       html+='<button class="btn-admin" style="background:#1a1a1a;color:#888;flex:1;margin-top:0;" onclick="adminSalvarLink(\''+k+'\')">💾 Salvar link</button>';
       html+='</div>';
+      var curPixIdx=0;
+      ADMIN_PIX_OPTIONS.forEach(function(opt,oi){if(opt.chave===s.pixChave)curPixIdx=oi;});
+      html+='<div class="field" style="margin:8px 0 6px;"><label>Pix para receber (admin)</label>';
+      html+='<select id="salaPixAdmin_'+k+'">';
+      ADMIN_PIX_OPTIONS.forEach(function(opt,oi){
+        html+='<option value="'+oi+'"'+(oi===curPixIdx?' selected':'')+'>'+esc(opt.label)+'</option>';
+      });
+      html+='</select></div>';
+      html+='<div class="admin-quick-row" style="margin-bottom:6px;">';
+      html+='<button class="btn-admin" style="background:#1a1a1a;color:#888;flex:1;margin-top:0;" onclick="adminSalvarPixAdmin(\''+k+'\')">💾 Salvar Pix</button>';
+      html+='</div>';
       html+='<div class="admin-quick-row" style="margin-bottom:6px;">';
       html+= linkAberto
         ? '<button class="btn-admin btn-bloquear" style="margin-top:0;" onclick="adminFecharLink(\''+k+'\')">🔒 Fechar sala (esconder link)</button>'
@@ -2080,23 +2096,60 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
         ? '<button class="btn-admin btn-bloquear-inscricoes" style="margin-top:0;" onclick="adminFecharSala(\''+k+'\')">🚫 Fechar inscrições</button>'
         : '<button class="btn-admin btn-liberar-inscricoes" style="margin-top:0;" onclick="adminAbrirSala(\''+k+'\')">✅ Abrir inscrições</button>';
       html+='</div>';
+      html+='<div class="sala-row-inscritos" style="margin:10px 0 6px;">';
+      html+='<div class="manage-sep-title" style="font-size:.85rem;margin:0 0 6px;">👥 Inscritos ('+totalInsc+')</div>';
+      var inscritosObj=s.inscritos||{};
+      var inscKeys=Object.keys(inscritosObj);
+      if(inscKeys.length){
+        inscKeys.forEach(function(ik){
+          var p=inscritosObj[ik];
+          var nomeExib=p.brawl||p.nome||'—';
+          var safeNomeP=String(nomeExib).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+          html+='<div class="admin-inscrito-row">';
+          html+='<span class="admin-inscrito-nome">'+esc(nomeExib)+'</span>';
+          html+='<button class="btn-remover-inscrito" onclick="adminRemoverInscritoSala(\''+k+'\',\''+ik+'\',\''+safeNomeP+'\')" title="Remover">🗑️</button>';
+          html+='</div>';
+        });
+      } else {
+        html+='<div class="inscritos-empty">Nenhum inscrito ainda.</div>';
+      }
+      html+='</div>';
       html+='<button class="btn-admin" style="background:#1a0505;color:#cc4444;margin-top:0;" onclick="adminExcluirSala(\''+k+'\',\''+safeNome+'\')">🗑️ Excluir sala</button>';
       html+='</div>';
     });
     el.innerHTML=html;
   }
+  window.adminSalvarPixAdmin=function(k){
+    var sel=document.getElementById('salaPixAdmin_'+k);
+    var idx=sel?parseInt(sel.value):0;
+    var opt=ADMIN_PIX_OPTIONS[idx]||ADMIN_PIX_OPTIONS[0];
+    refSalas.child(k).update({pixAdmin:opt.label,pixChave:opt.chave},function(err){
+      if(err){toast('Erro!','error');return;}
+      toast('✅ Pix da sala atualizado para '+opt.label+'!','success');
+    });
+  };
+  window.adminRemoverInscritoSala=function(salaKey,inscritoKey,nome){
+    if(!confirm('Remover '+nome+' desta sala?'))return;
+    refSalas.child(salaKey).child('inscritos').child(inscritoKey).remove(function(err){
+      if(err){toast('Erro!','error');return;}
+      toast('🗑️ '+nome+' removido da sala.');
+    });
+  };
   document.getElementById('btnCriarSala').addEventListener('click',function(){
     var nome=document.getElementById('inputNomeSala').value.trim();
     var val=parseFloat(document.getElementById('inputValorSala').value);
     var vagasRaw=document.getElementById('inputVagasSala').value.trim();
     var vagas=vagasRaw===''?null:(parseInt(vagasRaw)||null);
+    var pixIdx=parseInt(document.getElementById('inputPixAdminSala').value)||0;
+    var pixOpt=ADMIN_PIX_OPTIONS[pixIdx]||ADMIN_PIX_OPTIONS[0];
     if(!nome){toast('Digite o nome da sala!','error');return;}
     if(isNaN(val)||val<1){toast('Digite um valor válido!','error');return;}
-    refSalas.push({nome:nome,valor:val,vagas:vagas,status:'aberta',linkAberto:false,link:'',criadoEm:Date.now()},function(err){
+    refSalas.push({nome:nome,valor:val,vagas:vagas,status:'aberta',linkAberto:false,link:'',pixAdmin:pixOpt.label,pixChave:pixOpt.chave,criadoEm:Date.now()},function(err){
       if(err){toast('Erro: '+err.message,'error');return;}
       document.getElementById('inputNomeSala').value='';
       document.getElementById('inputValorSala').value='';
       document.getElementById('inputVagasSala').value='';
+      document.getElementById('inputPixAdminSala').value='0';
       toast('✅ Sala "'+nome+'" criada!','success');
     });
   });
