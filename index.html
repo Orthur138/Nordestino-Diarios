@@ -534,6 +534,14 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
 .admin-inscrito-row{display:flex;align-items:center;justify-content:space-between;gap:8px;
   background:#0d0d0d;border:1px solid #222;border-radius:8px;padding:8px 10px;margin-bottom:6px;}
 .admin-inscrito-nome{font-size:.82rem;color:var(--text);}
+.admin-inscrito-btns{display:flex;gap:6px;flex-shrink:0;}
+.tag-liberado{font-size:.62rem;color:var(--green);font-weight:700;}
+.btn-liberar-pessoa{flex-shrink:0;width:28px;height:28px;border:1px solid #2e2410;border-radius:6px;
+  background:#1a1500;color:#7a5f1a;font-size:.76rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;}
+.btn-liberar-pessoa:hover:not(:disabled){color:var(--gold);border-color:var(--gold-border);}
+.btn-liberar-pessoa.liberado{background:#0d2a0d;border-color:#1a4a1a;color:#66ff99;}
+.btn-liberar-pessoa:disabled{opacity:.35;cursor:not-allowed;}
 .sala-row-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px;flex-wrap:wrap;}
 .sala-row-nome{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.8px;color:var(--text);}
 .sala-row-info{font-size:.72rem;color:var(--muted);margin-bottom:6px;}
@@ -1509,7 +1517,8 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
         var pixLabel=s.pixAdmin||'🟡 Arthur', pixChave=s.pixChave||'arthursant792@gmail.com';
         pixInfo.innerHTML='<div class="pix-row"><span class="pix-nome">'+esc(pixLabel)+'</span><span class="pix-key">'+esc(pixChave)+'</span><button class="btn-copiar-pix" onclick="copiarChave(\''+pixChave+'\')">📋</button></div>';
       }
-      var aberta=!!(s.linkAberto&&s.link);
+      var meuInscrito=inscritos[dig(tel)]||{};
+      var aberta=!!(s.link&&(s.linkAberto||meuInscrito.liberado));
       document.getElementById('salaMiniFechada').style.display=aberta?'none':'block';
       document.getElementById('salaMiniAberta').style.display=aberta?'block':'none';
       if(aberta)document.getElementById('btnEntrarSalaMini').href=s.link;
@@ -2100,14 +2109,23 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
       html+='<div class="manage-sep-title" style="font-size:.85rem;margin:0 0 6px;">👥 Inscritos ('+totalInsc+')</div>';
       var inscritosObj=s.inscritos||{};
       var inscKeys=Object.keys(inscritosObj);
+      var temLink=!!(s.link&&s.link.trim());
       if(inscKeys.length){
         inscKeys.forEach(function(ik){
           var p=inscritosObj[ik];
           var nomeExib=p.brawl||p.nome||'—';
           var safeNomeP=String(nomeExib).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+          var liberadoP=!!p.liberado;
           html+='<div class="admin-inscrito-row">';
-          html+='<span class="admin-inscrito-nome">'+esc(nomeExib)+'</span>';
+          html+='<span class="admin-inscrito-nome">'+esc(nomeExib)+(liberadoP?' <span class="tag-liberado">🔓 liberado</span>':'')+'</span>';
+          html+='<div class="admin-inscrito-btns">';
+          if(liberadoP){
+            html+='<button class="btn-liberar-pessoa liberado" onclick="adminLiberarSalaPessoa(\''+k+'\',\''+ik+'\',false,\''+safeNomeP+'\')" title="Bloquear de novo pra essa pessoa">🔒</button>';
+          } else {
+            html+='<button class="btn-liberar-pessoa" '+(temLink?'':'disabled title="Salve o link da sala primeiro"')+' onclick="adminLiberarSalaPessoa(\''+k+'\',\''+ik+'\',true,\''+safeNomeP+'\')" title="'+(temLink?'Liberar sala só pra essa pessoa':'Salve o link da sala primeiro')+'">🔓</button>';
+          }
           html+='<button class="btn-remover-inscrito" onclick="adminRemoverInscritoSala(\''+k+'\',\''+ik+'\',\''+safeNomeP+'\')" title="Remover">🗑️</button>';
+          html+='</div>';
           html+='</div>';
         });
       } else {
@@ -2126,6 +2144,17 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     refSalas.child(k).update({pixAdmin:opt.label,pixChave:opt.chave},function(err){
       if(err){toast('Erro!','error');return;}
       toast('✅ Pix da sala atualizado para '+opt.label+'!','success');
+    });
+  };
+  window.adminLiberarSalaPessoa=function(salaKey,inscritoKey,liberar,nome){
+    var sala=salasDinamicas[salaKey];
+    if(liberar&&(!sala||!sala.link||!sala.link.trim())){
+      toast('Salve o link da sala antes de liberar!','error');
+      return;
+    }
+    refSalas.child(salaKey).child('inscritos').child(inscritoKey).update({liberado:liberar},function(err){
+      if(err){toast('Erro!','error');return;}
+      toast(liberar?('🔓 Sala liberada só pra '+nome+'!'):('🔒 Sala bloqueada de novo pra '+nome+'.'),'success');
     });
   };
   window.adminRemoverInscritoSala=function(salaKey,inscritoKey,nome){
