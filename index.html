@@ -155,6 +155,7 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
 .btn-copiar-pix{background:none;border:1px solid #5a4400;color:#cc9900;border-radius:6px;
   padding:5px 8px;cursor:pointer;font-size:.68rem;white-space:nowrap;flex-shrink:0;}
 .btn-copiar-pix:hover{border-color:var(--gold);color:var(--gold);background:#1a1500;}
+.btn-copiar-pix.copiado{border-color:var(--green);color:var(--green);background:#0d2a0d;}
 .pix-select-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px;}
 .btn-pix-escolher{flex:1;min-width:90px;background:#0d0d0d;border:1px solid var(--gold-border);
   color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:1px;
@@ -164,6 +165,33 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
 .pix-reveal .pix-row{border-bottom:none;}
 
 .sala-box{background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:14px 16px;}
+.regras-box{background:#1a0d0d;border:1px solid #3a1a1a;border-radius:10px;padding:12px 14px;margin-bottom:12px;}
+.regras-title{font-family:'Bebas Neue',sans-serif;font-size:.92rem;letter-spacing:1px;color:#e2624a;margin-bottom:6px;}
+.regras-texto{font-size:.8rem;color:#d8b8ae;line-height:1.6;white-space:pre-wrap;}
+
+.comprovante-box{background:#0d1408;border:1px solid #2a3a1a;border-radius:12px;padding:14px 16px;margin-bottom:12px;text-align:center;}
+.comprovante-status{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:.5px;color:var(--gold);margin-bottom:8px;}
+.comprovante-status.enviado{color:var(--green);}
+.comprovante-status.liberado{color:var(--green);}
+#comprovantePreview{max-width:100%;max-height:220px;border-radius:8px;margin-bottom:10px;display:block;}
+.btn-comprovante{width:100%;background:linear-gradient(135deg,#2a4a1a,#1a3010);color:#a8e08a;
+  border:1px solid #3a5a20;border-radius:10px;padding:12px;font-family:'Bebas Neue',sans-serif;
+  font-size:1rem;letter-spacing:1px;cursor:pointer;}
+.btn-comprovante:hover{background:#22421a;}
+.comprovante-timer{font-size:.76rem;color:#e2a13a;margin-top:8px;font-weight:600;}
+.comprovante-timer.urgente{color:#e2624a;}
+.comprovante-hint{font-size:.68rem;color:#556655;margin-top:8px;line-height:1.4;}
+
+.comprovante-thumb{width:38px;height:38px;object-fit:cover;border-radius:6px;border:1px solid #333;
+  cursor:pointer;flex-shrink:0;}
+.tag-pendente{font-size:.62rem;color:#c79a2e;font-weight:700;}
+.tag-comprovante{font-size:.62rem;color:#f28c28;font-weight:700;}
+.comprovante-viewer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:999;
+  align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:20px;}
+.comprovante-viewer.show{display:flex;}
+.comprovante-viewer img{max-width:100%;max-height:80vh;border-radius:10px;}
+.comprovante-viewer-close{background:#1a1a1a;border:1px solid #333;color:#ccc;padding:10px 20px;
+  border-radius:10px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;cursor:pointer;}
 .sm-fechada{text-align:center;padding:6px 0;}
 .sm-lock{font-size:1.5rem;display:block;margin-bottom:4px;}
 .sm-titulo{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:1px;color:#993333;}
@@ -534,6 +562,7 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
 .admin-inscrito-row{display:flex;align-items:center;justify-content:space-between;gap:8px;
   background:#0d0d0d;border:1px solid #222;border-radius:8px;padding:8px 10px;margin-bottom:6px;}
 .admin-inscrito-nome{font-size:.82rem;color:var(--text);}
+.admin-inscrito-left{display:flex;align-items:center;gap:8px;min-width:0;flex:1;}
 .admin-inscrito-btns{display:flex;gap:6px;flex-shrink:0;}
 .tag-liberado{font-size:.62rem;color:var(--green);font-weight:700;}
 .btn-liberar-pessoa{flex-shrink:0;width:28px;height:28px;border:1px solid #2e2410;border-radius:6px;
@@ -657,6 +686,10 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
       <div class="card-head"><span class="ch-icon">🎮</span><h2>Garantir minha vaga</h2></div>
       <div class="card-sub">Confirme sua inscrição nesta sala. <span class="alerta">⚠️ Após isso, a chave PIX será exibida para você pagar direto com o admin.</span></div>
       <div id="vagaSaldoAviso" style="display:none;" class="modal-saldo-aviso">💰 Você não precisa de saldo para se inscrever — o pagamento é feito manualmente via PIX direto pro admin, depois da confirmação.</div>
+      <div id="vagaRegrasBox" class="regras-box" style="display:none;">
+        <div class="regras-title">📋 Regras da sala</div>
+        <div id="vagaRegrasTexto" class="regras-texto"></div>
+      </div>
       <p class="salas-hint" id="vagaInfoLinha" style="margin-bottom:12px;">—</p>
       <div class="field"><label>Nick no Brawl Stars</label><input type="text" id="inputVagaNick" placeholder="Ex: ProPlayer123"></div>
       <button class="btn-main" id="btnGarantirVaga">✓ Garantir minha vaga</button>
@@ -682,6 +715,18 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
       <div class="pix-box" id="pixMiniBox">
         <div class="pix-title">📣 Envie o PIX pro admin</div>
         <div id="pixAdminInfo"></div>
+      </div>
+      <div class="comprovante-box" id="comprovanteBox">
+        <div class="comprovante-status" id="comprovanteStatus">🟡 Aguardando envio do comprovante</div>
+        <img id="comprovantePreview" style="display:none;">
+        <input type="file" id="inputComprovante" accept="image/*" style="display:none;">
+        <button class="btn-comprovante" id="btnEnviarComprovante">📎 Enviar comprovante do PIX</button>
+        <div class="comprovante-timer" id="comprovanteTimer"></div>
+        <div class="comprovante-hint">Print da tela de confirmação do PIX, ou o recibo/comprovante gerado pelo próprio app do seu banco.</div>
+      </div>
+      <div id="posRegrasBox" class="regras-box" style="display:none;">
+        <div class="regras-title">📋 Regras da sala</div>
+        <div id="posRegrasTexto" class="regras-texto"></div>
       </div>
       <div class="sala-box">
         <div id="salaMiniFechada" class="sm-fechada"><span class="sm-lock">🔒</span><div class="sm-titulo">SALA FECHADA</div><div class="sm-sub">Aguarde o admin liberar...</div></div>
@@ -723,6 +768,7 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
           <option value="2">🟣 Arturo</option>
         </select>
       </div>
+      <div class="field"><label>Regras da sala (opcional)</label><textarea id="inputRegrasSala" rows="3" placeholder="Ex: ❌ Surge&#10;❌ Shelly&#10;❌ Cordelius" style="width:100%;background:#0d0d0d;border:1px solid #2a2a2a;border-radius:10px;padding:13px 16px;color:var(--text);font-family:'Barlow',sans-serif;font-size:.95rem;outline:none;resize:vertical;"></textarea></div>
       <button class="btn-main" id="btnCriarSala">+ Criar Sala</button>
       <div class="manage-sep-title">📋 Minhas Salas</div>
       <div id="adminSalasList"></div>
@@ -781,7 +827,7 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
       <div class="bc-head"><div class="bc-title">🏆 Ranking</div></div>
       <div class="rank-toggle">
         <button id="btnTogNormal" class="active" onclick="setDiarioAtivo('normal')">🎯 Normal</button>
-        <button id="btnTogMini" onclick="setDiarioAtivo('mini')">⚡ Mini</button>
+        <button id="btnTogMini" onclick="setDiarioAtivo('mini')">⚡ Metade (2,50)</button>
       </div>
       <div id="rankingLista"><div class="rank-empty">Carregando...</div></div>
     </div>
@@ -817,7 +863,7 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
         </div>
         <div class="lucro-toggle">
           <button id="btnLucroNormal" onclick="setLucroTab('normal')">🎯 Normal</button>
-          <button id="btnLucroMini" onclick="setLucroTab('mini')">⚡ Mini</button>
+          <button id="btnLucroMini" onclick="setLucroTab('mini')">⚡ Metade (2,50)</button>
           <button id="btnLucroEspecial" onclick="setLucroTab('especial')">⭐ Especial</button>
           <button id="btnLucro1v1" onclick="setLucroTab('1v1')">⚔️ 1v1</button>
           <button id="btnLucroTotal" onclick="setLucroTab('total')">📊 Total</button>
@@ -854,7 +900,7 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
       <p class="hint">Selecione o jogador na lista — apenas quem já fez login no site aparece aqui.</p>
       <div class="diario-toggle-admin">
         <button id="btnAdmNormal" class="active" onclick="setAdminDiario('normal')">🎯 Normal</button>
-        <button id="btnAdmMini" onclick="setAdminDiario('mini')">⚡ Mini</button>
+        <button id="btnAdmMini" onclick="setAdminDiario('mini')">⚡ Metade (2,50)</button>
       </div>
       <div class="add-jogador-row">
         <select id="selectNovoJogador"><option value="">Selecione um jogador...</option></select>
@@ -915,6 +961,11 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
 </div>
 
 <div class="toast" id="toast"></div>
+
+<div class="comprovante-viewer" id="comprovanteViewer" onclick="fecharComprovanteViewer()">
+  <img id="comprovanteViewerImg" onclick="event.stopPropagation()">
+  <button class="comprovante-viewer-close" onclick="fecharComprovanteViewer()">✕ Fechar</button>
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -1377,7 +1428,7 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     if(!lucroData[admKey]||!lucroData[admKey][tipo])return{valor:0,diarios:0};
     var t=lucroData[admKey][tipo];return{valor:Number(t.valor)||0,diarios:Number(t.diarios)||0};
   }
-  function getTipoLabel(tipo){return{'normal':'Normal','mini':'Mini','especial':'Especial','1v1':'1v1'}[tipo]||tipo;}
+  function getTipoLabel(tipo){return{'normal':'Normal','mini':'Metade (2,50)','especial':'Especial','1v1':'1v1'}[tipo]||tipo;}
   function renderLucro(){
     var el=document.getElementById('lucroConteudo'); if(!el)return;
     var admsToShow=lucroFiltroAdm==='todos'?ADMS:[lucroFiltroAdm];
@@ -1515,13 +1566,21 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
       var pixInfo=document.getElementById('pixAdminInfo');
       if(pixInfo){
         var pixLabel=s.pixAdmin||'🟡 Arthur', pixChave=s.pixChave||'arthursant792@gmail.com';
-        pixInfo.innerHTML='<div class="pix-row"><span class="pix-nome">'+esc(pixLabel)+'</span><span class="pix-key">'+esc(pixChave)+'</span><button class="btn-copiar-pix" onclick="copiarChave(\''+pixChave+'\')">📋</button></div>';
+        pixInfo.innerHTML='<div class="pix-row"><span class="pix-nome">'+esc(pixLabel)+'</span><span class="pix-key">'+esc(pixChave)+'</span><button class="btn-copiar-pix" onclick="copiarChave(\''+pixChave+'\',this)">📋</button></div>';
       }
       var meuInscrito=inscritos[dig(tel)]||{};
       var aberta=!!(s.link&&(s.linkAberto||meuInscrito.liberado));
       document.getElementById('salaMiniFechada').style.display=aberta?'none':'block';
       document.getElementById('salaMiniAberta').style.display=aberta?'block':'none';
       if(aberta)document.getElementById('btnEntrarSalaMini').href=s.link;
+      var regrasBox=document.getElementById('posRegrasBox');
+      if(s.regras&&s.regras.trim()){
+        regrasBox.style.display='block';
+        document.getElementById('posRegrasTexto').textContent=s.regras;
+      } else {
+        regrasBox.style.display='none';
+      }
+      renderComprovanteBox(meuInscrito);
       renderInscritosSala(s);
       return;
     }
@@ -1539,10 +1598,123 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     document.getElementById('vagaCard').style.display='block';
     document.getElementById('vagaSaldoAviso').style.display=!temGratis(tel)?'block':'none';
     document.getElementById('vagaInfoLinha').textContent='Entrada: '+formatBRLLocal(s.valor)+' · Vagas: '+totalInsc+(s.vagas?('/'+s.vagas):' (sem limite)');
+    var vagaRegrasBox=document.getElementById('vagaRegrasBox');
+    if(s.regras&&s.regras.trim()){
+      vagaRegrasBox.style.display='block';
+      document.getElementById('vagaRegrasTexto').textContent=s.regras;
+    } else {
+      vagaRegrasBox.style.display='none';
+    }
     var nickInput=document.getElementById('inputVagaNick');
     if(nickInput)nickInput.value=getNick()||'';
     renderInscritosSala(s);
   }
+
+  var TEMPO_LIMITE_MS=10*60*1000; /* 10 minutos pra mandar comprovante */
+  var comprovanteTimerInterval=null;
+
+  function renderComprovanteBox(meuInscrito){
+    var statusEl=document.getElementById('comprovanteStatus');
+    var previewEl=document.getElementById('comprovantePreview');
+    var btnEl=document.getElementById('btnEnviarComprovante');
+    var timerEl=document.getElementById('comprovanteTimer');
+    if(!statusEl)return;
+    if(comprovanteTimerInterval){clearInterval(comprovanteTimerInterval);comprovanteTimerInterval=null;}
+    if(meuInscrito.liberado){
+      statusEl.textContent='✅ Sala liberada! Pagamento confirmado.';
+      statusEl.className='comprovante-status liberado';
+      btnEl.textContent='📎 Reenviar comprovante';
+      timerEl.textContent='';
+    } else if(meuInscrito.comprovante){
+      statusEl.textContent='📎 Comprovante enviado — aguardando conferência do admin';
+      statusEl.className='comprovante-status enviado';
+      previewEl.src=meuInscrito.comprovante;
+      previewEl.style.display='block';
+      btnEl.textContent='📎 Reenviar comprovante';
+      timerEl.textContent='';
+    } else {
+      statusEl.textContent='🟡 Aguardando envio do comprovante';
+      statusEl.className='comprovante-status';
+      previewEl.style.display='none';
+      btnEl.textContent='📎 Enviar comprovante do PIX';
+      var ts=meuInscrito.ts||Date.now();
+      var atualizaTimer=function(){
+        var restanteMs=TEMPO_LIMITE_MS-(Date.now()-ts);
+        if(restanteMs<=0){
+          timerEl.textContent='⏳ Tempo esgotado — vaga pode ser liberada a qualquer momento.';
+          timerEl.className='comprovante-timer urgente';
+          return;
+        }
+        var m=Math.floor(restanteMs/60000), sgs=Math.floor((restanteMs%60000)/1000);
+        timerEl.textContent='⏳ Envie o comprovante em até '+m+':'+(sgs<10?'0':'')+sgs+' ou a vaga é liberada';
+        timerEl.className='comprovante-timer'+(restanteMs<120000?' urgente':'');
+      };
+      atualizaTimer();
+      comprovanteTimerInterval=setInterval(atualizaTimer,1000);
+    }
+  }
+
+  function comprimirImagem(file,callback){
+    var reader=new FileReader();
+    reader.onload=function(e){
+      var img=new Image();
+      img.onload=function(){
+        var maxW=800;
+        var scale=Math.min(1,maxW/img.width);
+        var canvas=document.createElement('canvas');
+        canvas.width=img.width*scale;
+        canvas.height=img.height*scale;
+        var ctx=canvas.getContext('2d');
+        ctx.drawImage(img,0,0,canvas.width,canvas.height);
+        callback(canvas.toDataURL('image/jpeg',0.6));
+      };
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  document.getElementById('btnEnviarComprovante').addEventListener('click',function(){
+    document.getElementById('inputComprovante').click();
+  });
+  document.getElementById('inputComprovante').addEventListener('change',function(e){
+    var file=e.target.files[0]; if(!file)return;
+    var salaId=salaSelecionadaId, tel=getTel();
+    if(!salaId||!tel)return;
+    var btnEl=document.getElementById('btnEnviarComprovante');
+    btnEl.disabled=true; btnEl.textContent='Enviando...';
+    comprimirImagem(file,function(dataUrl){
+      db.ref('salas-dinamicas/'+salaId+'/inscritos/'+dig(tel)).update({comprovante:dataUrl,comprovanteEm:Date.now()},function(err){
+        btnEl.disabled=false;
+        if(err){toast('Erro ao enviar comprovante.','error');btnEl.textContent='📎 Enviar comprovante do PIX';return;}
+        toast('📎 Comprovante enviado! Aguarde a conferência do admin.','success');
+      });
+    });
+    e.target.value='';
+  });
+
+  window.verComprovante=function(src){
+    document.getElementById('comprovanteViewerImg').src=src;
+    document.getElementById('comprovanteViewer').classList.add('show');
+  };
+  window.fecharComprovanteViewer=function(){
+    document.getElementById('comprovanteViewer').classList.remove('show');
+  };
+
+  /* Remove automaticamente quem não mandou comprovante dentro do tempo limite */
+  function checarExpiracoesInscricoes(){
+    var agora=Date.now();
+    Object.keys(salasDinamicas).forEach(function(k){
+      var s=salasDinamicas[k];
+      var inscritos=s.inscritos||{};
+      Object.keys(inscritos).forEach(function(ik){
+        var p=inscritos[ik];
+        if(!p.comprovante&&!p.liberado&&p.ts&&(agora-p.ts)>TEMPO_LIMITE_MS){
+          refSalas.child(k).child('inscritos').child(ik).remove();
+        }
+      });
+    });
+  }
+  setInterval(checarExpiracoesInscricoes,20000);
 
   document.getElementById('btnGarantirVaga').addEventListener('click',function(){
     var salaId=salaSelecionadaId;
@@ -1888,9 +2060,22 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     if(navigator.clipboard){navigator.clipboard.writeText(chave).then(function(){toast('✅ Chave copiada!','success');});}
     else{toast('Copie: '+chave);}
   };
-  window.copiarChave=function(chave){
-    if(navigator.clipboard){navigator.clipboard.writeText(chave).then(function(){toast('✅ Chave copiada!','success');});}
-    else{toast('Copie: '+chave);}
+  window.copiarChave=function(chave,btnEl){
+    var marcarCopiado=function(){
+      if(!btnEl)return;
+      var original=btnEl.getAttribute('data-original')||btnEl.innerHTML;
+      btnEl.setAttribute('data-original',original);
+      btnEl.innerHTML='✅ Copiado!';
+      btnEl.classList.add('copiado');
+      btnEl.disabled=true;
+      setTimeout(function(){
+        btnEl.innerHTML=original;
+        btnEl.classList.remove('copiado');
+        btnEl.disabled=false;
+      },1500);
+    };
+    if(navigator.clipboard){navigator.clipboard.writeText(chave).then(function(){toast('✅ Chave copiada!','success');marcarCopiado();});}
+    else{toast('Copie: '+chave);marcarCopiado();}
   };
 
   document.getElementById('btnEnviarDep').addEventListener('click',function(){
@@ -2095,6 +2280,10 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
       html+='<div class="admin-quick-row" style="margin-bottom:6px;">';
       html+='<button class="btn-admin" style="background:#1a1a1a;color:#888;flex:1;margin-top:0;" onclick="adminSalvarPixAdmin(\''+k+'\')">💾 Salvar Pix</button>';
       html+='</div>';
+      html+='<div class="field" style="margin:8px 0 6px;"><label>Regras da sala (opcional)</label><textarea id="salaRegras_'+k+'" rows="3" placeholder="Ex: ❌ Surge" style="width:100%;background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:13px 16px;color:var(--text);font-family:\'Barlow\',sans-serif;font-size:.95rem;outline:none;resize:vertical;">'+esc(s.regras||'')+'</textarea></div>';
+      html+='<div class="admin-quick-row" style="margin-bottom:6px;">';
+      html+='<button class="btn-admin" style="background:#1a1a1a;color:#888;flex:1;margin-top:0;" onclick="adminSalvarRegras(\''+k+'\')">💾 Salvar regras</button>';
+      html+='</div>';
       html+='<div class="admin-quick-row" style="margin-bottom:6px;">';
       html+= linkAberto
         ? '<button class="btn-admin btn-bloquear" style="margin-top:0;" onclick="adminFecharLink(\''+k+'\')">🔒 Fechar sala (esconder link)</button>'
@@ -2116,8 +2305,15 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
           var nomeExib=p.brawl||p.nome||'—';
           var safeNomeP=String(nomeExib).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
           var liberadoP=!!p.liberado;
+          var temComprovante=!!p.comprovante;
+          var statusTag=liberadoP?' <span class="tag-liberado">🔓 liberado</span>':(temComprovante?' <span class="tag-comprovante">📎 conferir</span>':' <span class="tag-pendente">🟡 pendente</span>');
           html+='<div class="admin-inscrito-row">';
-          html+='<span class="admin-inscrito-nome">'+esc(nomeExib)+(liberadoP?' <span class="tag-liberado">🔓 liberado</span>':'')+'</span>';
+          html+='<div class="admin-inscrito-left">';
+          if(temComprovante){
+            html+='<img src="'+p.comprovante+'" class="comprovante-thumb" onclick="verComprovante(\''+p.comprovante+'\')" title="Ver comprovante">';
+          }
+          html+='<span class="admin-inscrito-nome">'+esc(nomeExib)+statusTag+'</span>';
+          html+='</div>';
           html+='<div class="admin-inscrito-btns">';
           if(liberadoP){
             html+='<button class="btn-liberar-pessoa liberado" onclick="adminLiberarSalaPessoa(\''+k+'\',\''+ik+'\',false,\''+safeNomeP+'\')" title="Bloquear de novo pra essa pessoa">🔒</button>';
@@ -2137,6 +2333,11 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     });
     el.innerHTML=html;
   }
+  window.adminSalvarRegras=function(k){
+    var input=document.getElementById('salaRegras_'+k);
+    var regras=input?input.value.trim():'';
+    refSalas.child(k).update({regras:regras},function(err){if(err)toast('Erro!','error');else toast('✅ Regras salvas!','success');});
+  };
   window.adminSalvarPixAdmin=function(k){
     var sel=document.getElementById('salaPixAdmin_'+k);
     var idx=sel?parseInt(sel.value):0;
@@ -2171,14 +2372,16 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     var vagas=vagasRaw===''?null:(parseInt(vagasRaw)||null);
     var pixIdx=parseInt(document.getElementById('inputPixAdminSala').value)||0;
     var pixOpt=ADMIN_PIX_OPTIONS[pixIdx]||ADMIN_PIX_OPTIONS[0];
+    var regras=document.getElementById('inputRegrasSala').value.trim();
     if(!nome){toast('Digite o nome da sala!','error');return;}
     if(isNaN(val)||val<1){toast('Digite um valor válido!','error');return;}
-    refSalas.push({nome:nome,valor:val,vagas:vagas,status:'aberta',linkAberto:false,link:'',pixAdmin:pixOpt.label,pixChave:pixOpt.chave,criadoEm:Date.now()},function(err){
+    refSalas.push({nome:nome,valor:val,vagas:vagas,status:'aberta',linkAberto:false,link:'',pixAdmin:pixOpt.label,pixChave:pixOpt.chave,regras:regras,criadoEm:Date.now()},function(err){
       if(err){toast('Erro: '+err.message,'error');return;}
       document.getElementById('inputNomeSala').value='';
       document.getElementById('inputValorSala').value='';
       document.getElementById('inputVagasSala').value='';
       document.getElementById('inputPixAdminSala').value='0';
+      document.getElementById('inputRegrasSala').value='';
       toast('✅ Sala "'+nome+'" criada!','success');
     });
   });
