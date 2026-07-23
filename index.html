@@ -578,6 +578,30 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
 .sala-detalhe-titulo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:1px;
   color:var(--text);margin-bottom:6px;}
 
+/* ===== Stats + barra de progresso (estilo dashboard, flat) ===== */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px;}
+.stat-box{background:var(--card);border:1px solid var(--border2);border-radius:14px;
+  padding:16px 8px;text-align:center;}
+.stat-box .stat-icon{font-size:1.25rem;display:block;margin-bottom:4px;}
+.stat-box .stat-num{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;color:var(--text);line-height:1;}
+.stat-box .stat-lbl{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:5px;}
+.progress-track{background:#1a1510;border:1px solid var(--border2);border-radius:8px;height:9px;overflow:hidden;margin:2px 0 6px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--orange),var(--red));border-radius:8px;transition:width .3s;}
+.progress-label{text-align:center;font-size:.72rem;color:var(--muted);}
+
+/* ===== Lista de inscritos — avatar numerado circular (flat) ===== */
+.insc-row{display:flex;align-items:center;gap:12px;background:var(--card2);
+  border:1px solid var(--border2);border-radius:12px;padding:10px 14px;margin-bottom:8px;}
+.insc-num{width:32px;height:32px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--gold),var(--orange));color:#1a0d00;
+  font-family:'Bebas Neue',sans-serif;font-size:.95rem;
+  display:flex;align-items:center;justify-content:center;}
+.insc-body{flex:1;min-width:0;}
+.insc-nome{font-weight:700;font-size:.9rem;color:var(--text);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.insc-sub{font-size:.7rem;color:var(--muted);margin-top:1px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
 /* Config Salas — linhas por sala */
 .sala-row-admin{background:#131313;border:1px solid #222;border-radius:10px;padding:12px;margin-bottom:10px;}
 .admin-inscrito-row{display:flex;align-items:center;justify-content:space-between;gap:8px;
@@ -746,6 +770,8 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
       <button class="btn-voltar-salas" onclick="voltarSalas()">← Voltar às salas</button>
       <div class="sala-detalhe-titulo" id="salaDetalheNome">—</div>
     </div>
+
+    <div id="salaStatsBox" style="padding:0 16px;margin-bottom:14px;"></div>
 
     <div class="aviso-bloqueado" id="salaBloqueadaMsg" style="margin:0 16px 12px;">
       <span class="icon">🚫</span>
@@ -1627,10 +1653,11 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
       arr.forEach(function(p,i){
         var ben=beneficioEfetivo(p);
         var g=ben==='gratis', d=ben==='desconto';
-        var cls=g?' gratis':(d?' desconto':'');
-        html+='<div class="inscrito-item'+cls+'"><span class="in-num">'+(i+1)+'°</span><span class="in-nome">'+esc(p.brawl||p.nome)+'</span>';
-        if(g)html+='<span class="gratis-tag">🏆 Entrada Grátis</span>';
-        else if(d)html+='<span class="desconto-tag">🔥 R$2</span>';
+        var sub=g?'🏆 Entrada grátis':(d?'🔥 Meia entrada':'Inscrito confirmado');
+        html+='<div class="insc-row"><div class="insc-num">'+(i+1)+'</div>';
+        html+='<div class="insc-body"><div class="insc-nome">'+esc(p.brawl||p.nome)+'</div><div class="insc-sub">'+sub+'</div></div>';
+        if(g)html+='<span class="gratis-tag">🏆</span>';
+        else if(d)html+='<span class="desconto-tag">🔥</span>';
         html+='</div>';
       });
     } else {
@@ -1642,6 +1669,22 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     if(cnt)cnt.textContent=arr.length;
   }
 
+  function renderSalaStats(s,totalInsc){
+    var el=document.getElementById('salaStatsBox'); if(!el)return;
+    var vagas=s.vagas;
+    var pct=vagas?Math.min(100,Math.round((totalInsc/vagas)*100)):0;
+    var restantes=vagas?Math.max(0,vagas-totalInsc):'∞';
+    var html='<div class="stats-row">'+
+      '<div class="stat-box"><span class="stat-icon">👥</span><div class="stat-num">'+(vagas||'∞')+'</div><div class="stat-lbl">Vagas</div></div>'+
+      '<div class="stat-box"><span class="stat-icon">⚡</span><div class="stat-num">'+totalInsc+'</div><div class="stat-lbl">Inscritos</div></div>'+
+      '<div class="stat-box"><span class="stat-icon">👑</span><div class="stat-num">'+restantes+'</div><div class="stat-lbl">Restantes</div></div>'+
+      '</div>';
+    if(vagas){
+      html+='<div class="progress-track"><div class="progress-fill" style="width:'+pct+'%"></div></div>'+
+        '<div class="progress-label">'+totalInsc+'/'+vagas+' vagas preenchidas · '+pct+'%</div>';
+    }
+    el.innerHTML=html;
+  }
   function renderSalaDetalhe(){
     var s=salasDinamicas[salaSelecionadaId];
     if(!s){voltarSalas();return;}
@@ -1649,6 +1692,7 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     var tel=getTel();
     var inscritos=s.inscritos||{};
     var totalInsc=Object.keys(inscritos).length;
+    renderSalaStats(s,totalInsc);
     var jaInscrito=!!inscritos[dig(tel)];
 
     if(jaInscrito){
