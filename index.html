@@ -892,6 +892,12 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
           <option value="2">🟣 Arturo</option>
         </select>
       </div>
+      <div class="field"><label>Tipo de sala (contagem de participações)</label>
+        <select id="inputTipoSala">
+          <option value="normal">🎯 Normal</option>
+          <option value="mini">⚡ Metade (2,50)</option>
+        </select>
+      </div>
       <div class="field"><label>Regras da sala (opcional)</label><textarea id="inputRegrasSala" rows="3" placeholder="Ex: ❌ Surge&#10;❌ Shelly&#10;❌ Cordelius" style="width:100%;background:#0d0d0d;border:1px solid #2a2a2a;border-radius:10px;padding:13px 16px;color:var(--text);font-family:'Barlow',sans-serif;font-size:.95rem;outline:none;resize:vertical;"></textarea></div>
       <button class="btn-main" id="btnCriarSala">+ Criar Sala</button>
       <div class="manage-sep-title">📋 Minhas Salas</div>
@@ -1106,7 +1112,7 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 <script>
 (function(){
-  var TOTAL_VAGAS=9, VITORIAS_GRATIS_MINI=8, VITORIAS_GRATIS_NORMAL=5;
+  var TOTAL_VAGAS=9, VITORIAS_GRATIS_MINI=12, VITORIAS_GRATIS_NORMAL=12;
   var isAdmin=false, isAdminAccount=false;
   var carteiraHabilitada=true;
   var ultimosPartic={}, contasRegistradas={};
@@ -2574,6 +2580,9 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
       });
       html+='</select></div>';
       html+='<button class="btn-save-icon" title="Salvar Pix" onclick="adminSalvarPixAdmin(\''+k+'\')">💾</button></div>';
+      var curTipo=s.tipoDiario||(s.valor<=3?'mini':'normal');
+      html+='<div class="cfg-row"><div class="field"><label>Tipo de sala (participações)</label><select id="salaTipo_'+k+'"><option value="normal"'+(curTipo==='normal'?' selected':'')+'>🎯 Normal</option><option value="mini"'+(curTipo==='mini'?' selected':'')+'>⚡ Metade (2,50)</option></select></div>';
+      html+='<button class="btn-save-icon" title="Salvar tipo" onclick="adminSalvarTipoSala(\''+k+'\')">💾</button></div>';
 
       html+='<div class="field" style="margin:8px 0 6px;"><label>Regras da sala (opcional)</label>';
       html+='<div class="cfg-regras-wrap"><textarea id="salaRegras_'+k+'" rows="3" placeholder="Ex: ❌ Surge" style="width:100%;background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:13px 16px;color:var(--text);font-family:\'Barlow\',sans-serif;font-size:.95rem;outline:none;resize:vertical;">'+esc(s.regras||'')+'</textarea>';
@@ -2721,10 +2730,11 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
     var vagas=vagasRaw===''?null:(parseInt(vagasRaw)||null);
     var pixIdx=parseInt(document.getElementById('inputPixAdminSala').value)||0;
     var pixOpt=ADMIN_PIX_OPTIONS[pixIdx]||ADMIN_PIX_OPTIONS[0];
+    var tipoSala=document.getElementById('inputTipoSala').value||'normal';
     var regras=document.getElementById('inputRegrasSala').value.trim();
     if(!nome){toast('Digite o nome da sala!','error');return;}
     if(isNaN(val)||val<1){toast('Digite um valor válido!','error');return;}
-    refSalas.push({nome:nome,valor:val,vagas:vagas,status:'aberta',linkAberto:false,link:'',pixAdmin:pixOpt.label,pixChave:pixOpt.chave,pixAdmKey:pixOpt.admKey,regras:regras,partidaEncerrada:false,criadoEm:Date.now()},function(err){
+    refSalas.push({nome:nome,valor:val,vagas:vagas,status:'aberta',linkAberto:false,link:'',pixAdmin:pixOpt.label,pixChave:pixOpt.chave,pixAdmKey:pixOpt.admKey,tipoDiario:tipoSala,regras:regras,partidaEncerrada:false,criadoEm:Date.now()},function(err){
       if(err){toast('Erro: '+err.message,'error');return;}
       document.getElementById('inputNomeSala').value='';
       document.getElementById('inputValorSala').value='';
@@ -2750,9 +2760,34 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
   };
   window.adminFecharSala=function(k){refSalas.child(k).update({status:'fechada'});};
   window.adminAbrirSala=function(k){refSalas.child(k).update({status:'aberta'});};
+  window.adminSalvarTipoSala=function(k){
+    var sel=document.getElementById('salaTipo_'+k);
+    var tipo=sel?sel.value:'normal';
+    refSalas.child(k).update({tipoDiario:tipo},function(err){
+      if(err){toast('Erro!','error');return;}
+      toast('✅ Tipo da sala salvo!','success');
+    });
+  };
   window.adminExcluirSala=function(k,nome){
-    if(!confirm('Excluir sala "'+nome+'"?'))return;
-    refSalas.child(k).remove(function(err){if(err)toast('Erro!','error');else toast('Sala excluída.');});
+    if(!confirm('Excluir sala "'+nome+'"? Cada pessoa ainda inscrita vai ganhar +1 participação.'))return;
+    var sala=salasDinamicas[k]||{};
+    var tipo=sala.tipoDiario||(sala.valor<=3?'mini':'normal');
+    var refCont=tipo==='mini'?refVitMini:refVitNormal;
+    var contObj=tipo==='mini'?vitoriasMini:vitoriasNormal;
+    var inscritos=sala.inscritos||{};
+    var updates={};
+    Object.keys(inscritos).forEach(function(ik){
+      var p=inscritos[ik];
+      var telD=dig(p.telefone);
+      if(!telD)return;
+      var d=normEntry(contObj[telD]);
+      var nomeReg=(contasRegistradas[telD]&&contasRegistradas[telD].nome)||p.nome||d.nome;
+      updates[telD]={vitorias:d.vitorias+1,nome:nomeReg,ultimoBeneficioUsado:d.ultimoBeneficioUsado};
+    });
+    refCont.update(updates,function(errCont){
+      if(errCont){toast('Erro ao contar participações!','error');return;}
+      refSalas.child(k).remove(function(err){if(err)toast('Erro!','error');else toast('🗑️ Sala excluída. Participações contadas!','success');});
+    });
   };
 
   /* PERFIL */
