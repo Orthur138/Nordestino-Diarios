@@ -266,6 +266,14 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
 .rank-item:last-child{border-bottom:none;}
 .rank-pos{font-family:'Bebas Neue',sans-serif;font-size:.85rem;color:#444;min-width:20px;}
 .rank-pos.ouro{color:var(--gold)}.rank-pos.prata{color:#aaa}.rank-pos.bronze{color:#cd7f32}
+.rank-sub{font-size:.74rem;color:var(--muted);margin:-4px 0 12px;}
+.rank-item.top1{border:1.5px solid var(--gold);background:linear-gradient(90deg,rgba(244,197,66,.1),transparent);border-radius:10px;padding-left:6px;margin-bottom:2px;}
+.rank-item.top2{border:1.5px solid #aaa;background:linear-gradient(90deg,rgba(170,170,170,.08),transparent);border-radius:10px;padding-left:6px;margin-bottom:2px;}
+.rank-item.top3{border:1.5px solid #cd7f32;background:linear-gradient(90deg,rgba(205,127,50,.1),transparent);border-radius:10px;padding-left:6px;margin-bottom:2px;}
+.rank-medal{font-size:.9rem;margin-right:2px;}
+.btn-ver-todos{width:100%;margin-top:10px;background:#141414;border:1px solid #2a2a2a;color:var(--gold);
+  border-radius:10px;padding:11px;font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:1px;cursor:pointer;}
+.btn-ver-todos:hover{background:#1a1500;border-color:var(--gold-border);}
 .rank-nome{flex:1;font-weight:600;font-size:.78rem;color:var(--text);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .rank-nome.gratis-nome{color:var(--gold)}.rank-nome.desconto-nome{color:var(--orange)}
@@ -955,11 +963,13 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
   <div class="tab-page" id="tabRanking">
     <div class="bottom-card" style="margin:12px 16px;">
       <div class="bc-head"><div class="bc-title">🏆 Ranking</div></div>
+      <div class="rank-sub">Jogadores mais ativos — por partidas jogadas</div>
       <div class="rank-toggle">
         <button id="btnTogNormal" class="active" onclick="setDiarioAtivo('normal')">🎯 Normal</button>
         <button id="btnTogMini" onclick="setDiarioAtivo('mini')">⚡ Metade (2,50)</button>
       </div>
       <div id="rankingLista"><div class="rank-empty">Carregando...</div></div>
+      <button class="btn-ver-todos" id="btnVerTodosRanking" style="display:none;" onclick="toggleRankingExpandido()">Ver todos</button>
     </div>
   </div>
 
@@ -1302,36 +1312,56 @@ body{background:var(--dark);color:var(--text);font-family:'Barlow',sans-serif;mi
   /* RANKING */
   window.setDiarioAtivo=function(tipo){
     diarioAtivo=tipo;
+    rankingExpandido=false;
     document.getElementById('btnTogNormal').className=tipo==='normal'?'active':'';
     document.getElementById('btnTogMini').className=tipo==='mini'?'active':'';
+    renderRanking();
+  };
+  var rankingExpandido=false;
+  window.toggleRankingExpandido=function(){
+    rankingExpandido=!rankingExpandido;
     renderRanking();
   };
   function renderRanking(){
     var obj=diarioAtivo==='mini'?vitoriasMini:vitoriasNormal;
     var el=document.getElementById('rankingLista');
-    if(!obj||!Object.keys(obj).length){el.innerHTML='<div class="rank-empty">Nenhum jogador no ranking.</div>';return;}
+    var btnVer=document.getElementById('btnVerTodosRanking');
+    if(!obj||!Object.keys(obj).length){el.innerHTML='<div class="rank-empty">Nenhum jogador no ranking.</div>';if(btnVer)btnVer.style.display='none';return;}
     var arr=Object.keys(obj).map(function(tel){
       var d=normEntry(obj[tel]);
       return{tel:tel,nome:nomeRankingPorTel(tel),v:d.vitorias,usado:d.ultimoBeneficioUsado};
     });
     arr.sort(function(a,b){return b.v-a.v;});
+    var totalArr=arr.length;
+    var listaExibir=rankingExpandido?arr:arr.slice(0,10);
+    var medals=['🥇','🥈','🥉'];
     var html='';
-    for(var i=0;i<arr.length;i++){
-      var item=arr[i];
+    for(var i=0;i<listaExibir.length;i++){
+      var item=listaExibir[i];
       var posClass=i===0?'ouro':i===1?'prata':i===2?'bronze':'';
+      var topClass=i===0?' top1':i===1?' top2':i===2?' top3':'';
       var ben=diarioAtivo==='mini'?tipoBenMini(item.v):tipoBenNormal(item.v);
       var jaUsado=ben&&item.usado>=item.v;
       var disponivel=ben&&item.usado<item.v;
       var isG=(disponivel||jaUsado)&&ben==='gratis', isD=(disponivel||jaUsado)&&ben==='desconto';
-      html+='<div class="rank-item">';
+      html+='<div class="rank-item'+topClass+'">';
       html+='<div class="rank-pos '+posClass+'">'+(i+1)+'°</div>';
+      if(i<3)html+='<span class="rank-medal">'+medals[i]+'</span>';
       html+='<div class="rank-nome'+(isG?' gratis-nome':(isD?' desconto-nome':''))+'">'+esc(item.nome)+'</div>';
       if(isG)html+='<span class="gratis-tag'+(jaUsado?' usada':'')+'">🏆 '+(jaUsado?'Grátis usada':'Grátis')+'</span>';
       else if(isD)html+='<span class="desconto-tag'+(jaUsado?' usada':'')+'">🔥 '+(jaUsado?'R$2 usado':'R$2')+'</span>';
-      html+='<div class="rank-vit">'+item.v+'v</div>';
+      html+='<div class="rank-vit">'+item.v+' partida'+(item.v===1?'':'s')+'</div>';
       html+='</div>';
     }
     el.innerHTML=html;
+    if(btnVer){
+      if(totalArr>10){
+        btnVer.style.display='block';
+        btnVer.textContent=rankingExpandido?'▲ Ver só o top 10':'▼ Ver todos ('+totalArr+')';
+      } else {
+        btnVer.style.display='none';
+      }
+    }
   }
 
   /* ADMIN INSCRITOS (diário legado) */
